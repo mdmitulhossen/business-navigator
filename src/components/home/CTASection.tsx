@@ -9,7 +9,7 @@ const CTASection = () => {
 
   return (
     <section className="py-20 bg-gradient-hero relative overflow-hidden">
-      <SimpleParticles count={30} />
+      <SimpleParticles count={50} />
 
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
@@ -42,7 +42,7 @@ const CTASection = () => {
               asChild
               variant="outline"
               size="lg"
-              className="border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 dark:border-foreground/30 dark:text-foreground dark:hover:bg-foreground/10 px-8 py-6 text-base font-semibold rounded-lg"
+              className="border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 dark:border-foreground/30 dark:text-foreground dark:hover:bg-foreground/10 px-8 py-6 text-base font-semibold rounded-lg bg-transparent"
             >
               <a href="tel:+966112345678">
                 <Phone className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />

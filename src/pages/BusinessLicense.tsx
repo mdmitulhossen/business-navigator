@@ -166,7 +166,7 @@ const BusinessLicense = () => {
         />
 
         {/* Stats */}
-        < section className="py-16 bg-background border-b" >
+        <section className="py-16 bg-background border-b">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((stat, idx) => (

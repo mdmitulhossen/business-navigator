@@ -23,13 +23,13 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-3 mb-4 group">
               <img
                 src="/logo.png"
-                alt="Sauda Investment Logo"
+                alt="Souda Investment Logo"
                 className="h-10 w-auto object-contain"
                 onError={(e) => e.currentTarget.style.display = 'none'}
               />
               <div className="flex flex-col">
                 <span className="font-display font-bold text-base text-primary-foreground dark:text-slate-100">
-                  {language === 'en' ? 'Sauda Investment' : 'السعودي الاستثمار'}
+                  {language === 'en' ? 'Souda Investment' : 'السعودي الاستثمار'}
                 </span>
                 <span className="text-xs text-primary-foreground/70 dark:text-slate-500">
                   {language === 'en' ? 'Consultant' : 'والمستشار'}

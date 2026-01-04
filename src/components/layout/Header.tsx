@@ -102,13 +102,13 @@ const Header = () => {
           <Link to="/" onClick={scrollToTop} className="flex items-center gap-3">
             <img
               src="/logo.png"
-              alt="Sauda Investment Logo"
+              alt="Souda Investment Logo"
               className="h-12 w-auto object-contain"
               onError={(e) => e.currentTarget.style.display = 'none'}
             />
             <div className="flex flex-col">
               <span className="font-display font-bold text-base md:text-lg text-foreground leading-tight">
-                {language === 'en' ? 'Sauda Investment' : 'السعودي الاستثمار'}
+                {language === 'en' ? 'Souda Investment' : 'السعودي الاستثمار'}
               </span>
               <span className="text-xs text-muted-foreground">
                 {language === 'en' ? 'Consultant' : 'والمستشار'}

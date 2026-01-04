@@ -1,18 +1,103 @@
-import SimpleParticles from '@/components/animations/SimpleParticles';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { ISourceOptions } from '@tsparticles/engine';
+import Particles, { initParticlesEngine } from '@tsparticles/react';
+import { loadSlim } from '@tsparticles/slim';
 import { ArrowRight } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   const { t, isRTL } = useLanguage();
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);
+    });
+  }, []);
+
+  const particlesOptions: ISourceOptions = useMemo(() => ({
+    fullScreen: false,
+    background: {
+      color: {
+        value: 'transparent',
+      },
+    },
+    fpsLimit: 120,
+    interactivity: {
+      events: {
+        onHover: {
+          enable: true,
+          mode: 'grab',
+        },
+        resize: {
+          enable: true,
+        },
+      },
+      modes: {
+        grab: {
+          distance: 140,
+          links: {
+            opacity: 0.5,
+          },
+        },
+      },
+    },
+    particles: {
+      color: {
+        value: '#FFD700',
+      },
+      links: {
+        color: '#FFD700',
+        distance: 150,
+        enable: true,
+        opacity: 0.3,
+        width: 1,
+      },
+      move: {
+        direction: 'none',
+        enable: true,
+        outModes: {
+          default: 'bounce',
+        },
+        random: false,
+        speed: 1,
+        straight: false,
+      },
+      number: {
+        density: {
+          enable: true,
+        },
+        value: 80,
+      },
+      opacity: {
+        value: 0.5,
+      },
+      shape: {
+        type: 'circle',
+      },
+      size: {
+        value: { min: 1, max: 3 },
+      },
+    },
+    detectRetina: true,
+  }), []);
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      <SimpleParticles count={80} />
+      {init && (
+        <Particles
+          id="hero-particles"
+          options={particlesOptions}
+          className="absolute inset-0 z-10"
+        />
+      )}
 
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-hero">
+      <div className="absolute inset-0 bg-gradient-hero z-0">
         <div
           className="absolute inset-0 opacity-20"
           style={{
@@ -29,7 +114,7 @@ const HeroSection = () => {
       <div className="absolute bottom-20 left-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse-slow" />
 
       {/* Content */}
-      <div className="container-custom relative z-10 py-20">
+      <div className="container-custom relative z-20 py-20">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent/20 text-accent mb-8 animate-fade-in">
@@ -53,7 +138,7 @@ const HeroSection = () => {
             <Button
               asChild
               size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 py-6 text-base font-semibold rounded-lg"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 py-6 text-base font-semibold rounded-lg z-50!"
             >
               <Link to="/appointment">
                 {t('hero.cta1')}
@@ -64,7 +149,7 @@ const HeroSection = () => {
               asChild
               variant="outline"
               size="lg"
-              className="border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8 py-6 text-base font-semibold rounded-lg"
+              className="border-2 border-primary-foreground/30 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 px-8 py-6 text-base font-semibold rounded-lg z-50!"
             >
               <Link to="/services">{t('hero.cta2')}</Link>
             </Button>

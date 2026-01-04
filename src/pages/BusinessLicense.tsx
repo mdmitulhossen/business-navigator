@@ -1,3 +1,4 @@
+import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -156,43 +157,16 @@ const BusinessLicense = () => {
         } />
       </Helmet>
       <Layout>
-        {/* Hero */}
-        <section className="relative py-20 md:py-32 bg-gradient-hero overflow-hidden">
-          <div className="absolute inset-0 bg-primary/95" />
-          <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-transparent to-primary/20" />
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center max-w-4xl mx-auto">
-              <Badge variant="secondary" className="mb-6 bg-accent/20 text-accent border-accent/30">
-                {language === 'en' ? 'Start Your Business Journey' : 'ابدأ رحلتك التجارية'}
-              </Badge>
-              <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
-                {language === 'en' ? 'Business License Services' : 'خدمات تراخيص الأعمال'}
-              </h1>
-              <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 leading-relaxed">
-                {language === 'en'
-                  ? 'Choose between Trade License for commercial activities or Service License for professional services. We handle everything from registration to approval.'
-                  : 'اختر بين الرخصة التجارية للأنشطة التجارية أو رخصة الخدمات للخدمات المهنية. نحن نتولى كل شيء من التسجيل إلى الموافقة.'}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-3">
-                  <Link to="/appointment">
-                    {language === 'en' ? 'Get Started Today' : 'ابدأ اليوم'}
-                    <ArrowRight className={cn("w-5 h-5 ml-2", isRTL && "rotate-180")} />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8 py-3">
-                  <Link to="/contact">
-                    <Phone className="w-5 h-5 mr-2" />
-                    {language === 'en' ? 'Contact Us' : 'اتصل بنا'}
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <PageHero
+          badge={language === 'en' ? 'Start Your Business Journey' : 'ابدأ رحلتك التجارية'}
+          title={language === 'en' ? 'Business License Services' : 'خدمات تراخيص الأعمال'}
+          subtitle={language === 'en'
+            ? 'Choose between Trade License for commercial activities or Service License for professional services. We handle everything from registration to approval.'
+            : 'اختر بين الرخصة التجارية للأنشطة التجارية أو رخصة الخدمات للخدمات المهنية. نحن نتولى كل شيء من التسجيل إلى الموافقة.'}
+        />
 
         {/* Stats */}
-        <section className="py-16 bg-background border-b">
+        < section className="py-16 bg-background border-b" >
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((stat, idx) => (
@@ -206,10 +180,10 @@ const BusinessLicense = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section >
 
         {/* Trade Licenses */}
-        <section className="py-20 bg-background">
+        < section className="py-20 bg-background" >
           <div className="container mx-auto px-4">
             <div className={cn("mb-16 text-center", isRTL && "text-right")}>
               <Badge variant="outline" className="mb-4">
@@ -260,10 +234,10 @@ const BusinessLicense = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section >
 
         {/* Service Licenses */}
-        <section className="py-20 bg-muted/30">
+        < section className="py-20 bg-muted/30" >
           <div className="container mx-auto px-4">
             <div className={cn("mb-16 text-center", isRTL && "text-right")}>
               <Badge variant="outline" className="mb-4">
@@ -314,10 +288,10 @@ const BusinessLicense = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section >
 
         {/* Process */}
-        <section className="py-20 bg-background">
+        < section className="py-20 bg-background" >
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <Badge variant="outline" className="mb-4">
@@ -347,10 +321,10 @@ const BusinessLicense = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section >
 
         {/* Requirements */}
-        <section className="py-20 bg-muted/30">
+        < section className="py-20 bg-muted/30" >
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div className={isRTL ? "text-right" : ""}>
@@ -411,10 +385,10 @@ const BusinessLicense = () => {
               </div>
             </div>
           </div>
-        </section>
+        </section >
 
         {/* CTA */}
-        <section className="py-20 bg-primary text-primary-foreground">
+        < section className="py-20 bg-primary text-primary-foreground" >
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               {language === 'en' ? 'Ready to Start Your Business?' : 'مستعد لبدء عملك؟'}
@@ -439,8 +413,8 @@ const BusinessLicense = () => {
               </Button>
             </div>
           </div>
-        </section>
-      </Layout>
+        </section >
+      </Layout >
     </>
   );
 };

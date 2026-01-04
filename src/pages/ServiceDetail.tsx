@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import SimpleParticles from '@/components/animations/SimpleParticles';
 import CTASection from '@/components/home/CTASection';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -37,6 +38,7 @@ const ServiceDetail = () => {
     <Layout>
       {/* Hero */}
       <section className="relative pt-10 pb-10 bg-gradient-hero overflow-hidden">
+        <SimpleParticles count={30} />
         <div className="absolute inset-0 bg-primary/90 dark:bg-background/20" />
         <div className="container-custom relative z-10">
           <Link

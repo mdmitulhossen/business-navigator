@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { Calendar, Clock, User, Phone, Mail, Building2, CheckCircle } from 'lucide-react';
+import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceCategories, serviceCategoriesAr } from '@/data/demoData';
+import { Building2, Calendar, CheckCircle, Clock, Mail, Phone, User } from 'lucide-react';
+import { useState } from 'react';
 
 const Appointment = () => {
   const { language } = useLanguage();
@@ -40,24 +41,11 @@ const Appointment = () => {
 
   return (
     <Layout>
-      {/* Hero */}
-      <section className="relative py-20 bg-gradient-hero overflow-hidden">
-        <div className="absolute inset-0 bg-primary/90" />
-        <div className="container-custom relative z-10 text-center">
-          <span className="badge-accent mb-4 inline-block">
-            {language === 'en' ? 'APPOINTMENT' : 'حجز موعد'}
-          </span>
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4">
-            {language === 'en' ? 'Book Your Consultation' : 'احجز استشارتك'}
-          </h1>
-          <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto">
-            {language === 'en'
-              ? 'Schedule a free consultation with our expert team'
-              : 'حدد موعداً لاستشارة مجانية مع فريق الخبراء لدينا'}
-          </p>
-          <div className="w-16 h-1 bg-accent mx-auto rounded-full mt-6" />
-        </div>
-      </section>
+      <PageHero
+        badge={language === 'en' ? 'APPOINTMENT' : 'حجز موعد'}
+        title={language === 'en' ? 'Book Your Consultation' : 'احجز استشارتك'}
+        subtitle={language === 'en' ? 'Schedule a free consultation with our expert team' : 'حدد موعداً لاستشارة مجانية مع فريق الخبراء لدينا'}
+      />
 
       {/* Booking Section */}
       <section className="section-padding bg-background">
@@ -67,19 +55,17 @@ const Appointment = () => {
             {[1, 2, 3].map((s) => (
               <div key={s} className="flex items-center">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
-                    step >= s
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${step >= s
                       ? 'bg-accent text-accent-foreground'
                       : 'bg-muted text-muted-foreground'
-                  }`}
+                    }`}
                 >
                   {step > s ? <CheckCircle className="w-5 h-5" /> : s}
                 </div>
                 {s < 3 && (
                   <div
-                    className={`w-16 sm:w-24 h-1 mx-2 rounded transition-colors ${
-                      step > s ? 'bg-accent' : 'bg-muted'
-                    }`}
+                    className={`w-16 sm:w-24 h-1 mx-2 rounded transition-colors ${step > s ? 'bg-accent' : 'bg-muted'
+                      }`}
                   />
                 )}
               </div>
@@ -121,11 +107,10 @@ const Appointment = () => {
                         key={time}
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, time }))}
-                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
-                          formData.time === time
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${formData.time === time
                             ? 'bg-accent text-accent-foreground'
                             : 'bg-muted text-foreground hover:bg-muted/80'
-                        }`}
+                          }`}
                       >
                         {time}
                       </button>

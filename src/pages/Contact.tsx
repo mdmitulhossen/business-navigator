@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceCategories, serviceCategoriesAr } from '@/data/demoData';
+import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { useState } from 'react';
 
 const Contact = () => {
   const { t, language } = useLanguage();
@@ -57,17 +58,7 @@ const Contact = () => {
 
   return (
     <Layout>
-      {/* Hero */}
-      <section className="relative py-20 bg-gradient-hero overflow-hidden">
-        <div className="absolute inset-0 bg-primary/90" />
-        <div className="container-custom relative z-10 text-center">
-          <span className="badge-accent mb-4 inline-block">{t('contact.label')}</span>
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4">
-            {t('contact.title')}
-          </h1>
-          <div className="w-16 h-1 bg-accent mx-auto rounded-full" />
-        </div>
-      </section>
+      <PageHero badge={t('contact.label')} title={t('contact.title')} />
 
       {/* Contact Section */}
       <section className="section-padding bg-background">

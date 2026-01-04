@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom';
-import { FileText, Edit, Building2, Cpu, Palette, Home, Plane, Users, ArrowRight } from 'lucide-react';
+import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { services } from '@/data/demoData';
+import { ArrowRight, Building2, Cpu, Edit, FileText, Home, Palette, Plane, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const iconMap: Record<string, React.ComponentType<any>> = {
   FileText,
@@ -20,17 +21,7 @@ const Services = () => {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-hero overflow-hidden">
-        <div className="absolute inset-0 bg-primary/90" />
-        <div className="container-custom relative z-10 text-center">
-          <span className="badge-accent mb-4 inline-block">{t('services.label')}</span>
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4">
-            {t('services.title')}
-          </h1>
-          <div className="w-16 h-1 bg-accent mx-auto rounded-full" />
-        </div>
-      </section>
+      <PageHero badge={t('services.label')} title={t('services.title')} />
 
       {/* Services Grid */}
       <section className="section-padding bg-background">
@@ -47,11 +38,11 @@ const Services = () => {
                   <div className="service-icon group-hover:bg-accent/20 transition-colors mb-6">
                     {IconComponent && <IconComponent className="group-hover:text-accent transition-colors" />}
                   </div>
-                  
+
                   <h3 className="font-display font-bold text-xl text-foreground mb-3 group-hover:text-accent transition-colors">
                     {t(service.titleKey)}
                   </h3>
-                  
+
                   <p className="text-muted-foreground mb-6">
                     {t(service.descKey)}
                   </p>

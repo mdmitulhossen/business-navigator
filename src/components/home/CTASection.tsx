@@ -1,3 +1,4 @@
+import SimpleParticles from '@/components/animations/SimpleParticles';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ArrowRight, Phone } from 'lucide-react';
@@ -8,6 +9,8 @@ const CTASection = () => {
 
   return (
     <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      <SimpleParticles count={30} />
+
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl" />

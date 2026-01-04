@@ -12,7 +12,7 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
-import { Building2, ChevronDown, Globe, Menu, Moon, Sun, X } from 'lucide-react';
+import { ChevronDown, Globe, Menu, Moon, Sun, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -99,13 +99,20 @@ const Header = () => {
       <div className="container-custom">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" onClick={scrollToTop} className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-primary-foreground" />
-            </div>
+          <Link to="/" onClick={scrollToTop} className="flex items-center gap-3">
+            <img
+              src="/logo.png"
+              alt="Sauda Investment Logo"
+              className="h-12 w-auto object-contain"
+              onError={(e) => e.currentTarget.style.display = 'none'}
+            />
             <div className="flex flex-col">
-              <span className="font-display font-bold text-lg text-foreground">Consultant</span>
-              <span className="text-xs text-muted-foreground">Business Services</span>
+              <span className="font-display font-bold text-base md:text-lg text-foreground leading-tight">
+                {language === 'en' ? 'Sauda Investment' : 'السعودي الاستثمار'}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {language === 'en' ? 'Consultant' : 'والمستشار'}
+              </span>
             </div>
           </Link>
 

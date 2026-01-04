@@ -1,5 +1,6 @@
+import SimpleParticles from '@/components/animations/SimpleParticles';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Building2, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from 'lucide-react';
+import { Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -13,19 +14,25 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-primary text-primary-foreground dark:bg-slate-950 dark:text-slate-400">
-      <div className="container-custom py-12 md:py-16">
+    <footer className="bg-primary text-primary-foreground dark:bg-slate-950 dark:text-slate-400 relative overflow-hidden">
+      <SimpleParticles count={55} />
+      <div className="container-custom py-12 md:py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4 group">
-              <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center shadow-lg dark:bg-gradient-to-br dark:from-blue-500 dark:to-blue-600">
-                <Building2 className="w-6 h-6 text-accent-foreground dark:text-white" />
-              </div>
+            <Link to="/" className="flex items-center gap-3 mb-4 group">
+              <img
+                src="/logo.png"
+                alt="Sauda Investment Logo"
+                className="h-10 w-auto object-contain"
+                onError={(e) => e.currentTarget.style.display = 'none'}
+              />
               <div className="flex flex-col">
-                <span className="font-display font-bold text-lg text-primary-foreground dark:text-slate-100">Consultant</span>
+                <span className="font-display font-bold text-base text-primary-foreground dark:text-slate-100">
+                  {language === 'en' ? 'Sauda Investment' : 'السعودي الاستثمار'}
+                </span>
                 <span className="text-xs text-primary-foreground/70 dark:text-slate-500">
-                  {language === 'en' ? 'Your Strategic Partner' : 'شريكك الاستراتيجي'}
+                  {language === 'en' ? 'Consultant' : 'والمستشار'}
                 </span>
               </div>
             </Link>

@@ -1,7 +1,8 @@
-import { Target, Lightbulb, Award } from 'lucide-react';
+import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { teamMembers } from '@/data/demoData';
+import { Award, Lightbulb, Target } from 'lucide-react';
 
 const About = () => {
   const { t, language } = useLanguage();
@@ -26,19 +27,7 @@ const About = () => {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-hero overflow-hidden">
-        <div className="absolute inset-0 bg-primary/90" />
-        <div className="container-custom relative z-10 text-center">
-          <span className="badge-accent mb-4 inline-block">{t('about.label')}</span>
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-accent mb-4">
-            {t('about.title')}
-          </h1>
-          <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto">
-            {t('about.subtitle')}
-          </p>
-        </div>
-      </section>
+      <PageHero badge={t('about.label')} title={t('about.title')} subtitle={t('about.subtitle')} />
 
       {/* Values Section */}
       <section className="section-padding bg-background">

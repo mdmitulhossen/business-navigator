@@ -1,16 +1,19 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import SimpleParticles from '@/components/animations/SimpleParticles';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   const { t, isRTL } = useLanguage();
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      <SimpleParticles count={80} />
+
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-hero">
-        <div 
+        <div
           className="absolute inset-0 opacity-20"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80')`,

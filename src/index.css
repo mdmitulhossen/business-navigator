@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -9,42 +9,42 @@
     /* Primary - Deep Teal */
     --primary: 174 50% 20%;
     --primary-foreground: 40 60% 95%;
-    
+
     /* Accent - Gold */
     --accent: 43 65% 47%;
     --accent-foreground: 174 50% 15%;
-    
+
     /* Background & Foreground */
     --background: 40 20% 98%;
     --foreground: 174 50% 15%;
-    
+
     /* Card */
     --card: 0 0% 100%;
     --card-foreground: 174 50% 15%;
-    
+
     /* Popover */
     --popover: 0 0% 100%;
     --popover-foreground: 174 50% 15%;
-    
+
     /* Secondary */
     --secondary: 40 20% 94%;
     --secondary-foreground: 174 50% 20%;
-    
+
     /* Muted */
     --muted: 40 15% 92%;
     --muted-foreground: 174 20% 40%;
-    
+
     /* Destructive */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    
+
     /* Border & Input */
     --border: 40 15% 88%;
     --input: 40 15% 88%;
     --ring: 174 50% 25%;
-    
+
     --radius: 0.625rem;
-    
+
     /* Sidebar */
     --sidebar-background: 174 50% 18%;
     --sidebar-foreground: 40 60% 95%;
@@ -54,57 +54,72 @@
     --sidebar-accent-foreground: 40 60% 95%;
     --sidebar-border: 174 40% 25%;
     --sidebar-ring: 43 65% 47%;
-    
+
     /* Custom Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(174 50% 18%) 0%, hsl(174 45% 25%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(43 65% 47%) 0%, hsl(43 70% 55%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(40 20% 98%) 100%);
-    
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(174 50% 18%) 0%,
+      hsl(174 45% 25%) 100%
+    );
+    --gradient-accent: linear-gradient(
+      135deg,
+      hsl(43 65% 47%) 0%,
+      hsl(43 70% 55%) 100%
+    );
+    --gradient-card: linear-gradient(
+      180deg,
+      hsl(0 0% 100%) 0%,
+      hsl(40 20% 98%) 100%
+    );
+
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 hsl(174 50% 15% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(174 50% 15% / 0.1), 0 2px 4px -2px hsl(174 50% 15% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(174 50% 15% / 0.1), 0 4px 6px -4px hsl(174 50% 15% / 0.1);
-    --shadow-xl: 0 20px 25px -5px hsl(174 50% 15% / 0.1), 0 8px 10px -6px hsl(174 50% 15% / 0.1);
+    --shadow-md: 0 4px 6px -1px hsl(174 50% 15% / 0.1),
+      0 2px 4px -2px hsl(174 50% 15% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(174 50% 15% / 0.1),
+      0 4px 6px -4px hsl(174 50% 15% / 0.1);
+    --shadow-xl: 0 20px 25px -5px hsl(174 50% 15% / 0.1),
+      0 8px 10px -6px hsl(174 50% 15% / 0.1);
   }
 
   .dark {
     /* Primary - Deep Teal (adjusted for dark) */
     --primary: 174 45% 70%;
     --primary-foreground: 174 50% 10%;
-    
+
     /* Accent - Gold */
     --accent: 43 65% 55%;
     --accent-foreground: 174 50% 10%;
-    
+
     /* Background & Foreground */
     --background: 174 50% 8%;
     --foreground: 40 20% 95%;
-    
+
     /* Card */
     --card: 174 45% 12%;
     --card-foreground: 40 20% 95%;
-    
+
     /* Popover */
     --popover: 174 45% 12%;
     --popover-foreground: 40 20% 95%;
-    
+
     /* Secondary */
     --secondary: 174 40% 18%;
     --secondary-foreground: 40 20% 95%;
-    
+
     /* Muted */
     --muted: 174 35% 20%;
     --muted-foreground: 40 15% 65%;
-    
+
     /* Destructive */
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
-    
+
     /* Border & Input */
     --border: 174 35% 22%;
     --input: 174 35% 22%;
     --ring: 43 65% 55%;
-    
+
     /* Sidebar */
     --sidebar-background: 174 50% 6%;
     --sidebar-foreground: 40 60% 95%;
@@ -114,17 +129,32 @@
     --sidebar-accent-foreground: 40 60% 95%;
     --sidebar-border: 174 40% 18%;
     --sidebar-ring: 43 65% 55%;
-    
+
     /* Custom Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(174 50% 10%) 0%, hsl(174 45% 15%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(43 65% 50%) 0%, hsl(43 70% 60%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(174 45% 12%) 0%, hsl(174 50% 10%) 100%);
-    
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(174 50% 10%) 0%,
+      hsl(174 45% 15%) 100%
+    );
+    --gradient-accent: linear-gradient(
+      135deg,
+      hsl(43 65% 50%) 0%,
+      hsl(43 70% 60%) 100%
+    );
+    --gradient-card: linear-gradient(
+      180deg,
+      hsl(174 45% 12%) 0%,
+      hsl(174 50% 10%) 100%
+    );
+
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -2px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -4px hsl(0 0% 0% / 0.3);
-    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.4), 0 8px 10px -6px hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4),
+      0 2px 4px -2px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.4),
+      0 4px 6px -4px hsl(0 0% 0% / 0.3);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.4),
+      0 8px 10px -6px hsl(0 0% 0% / 0.3);
   }
 }
 
@@ -142,7 +172,7 @@
   }
 
   .font-arabic {
-    font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
+    font-family: "Noto Sans Arabic", "Inter", sans-serif;
   }
 }
 
@@ -186,7 +216,7 @@
 
   /* Section Styles */
   .section-padding {
-    @apply py-16 md:py-24 lg:py-32;
+    @apply py-8 md:py-10 lg:py-12;
   }
 
   .container-custom {
@@ -208,7 +238,7 @@
   }
 
   .underline-animation::after {
-    content: '';
+    content: "";
     @apply absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300;
   }
 
@@ -299,11 +329,21 @@
   }
 
   /* Stagger Delays */
-  .stagger-1 { animation-delay: 0.1s; }
-  .stagger-2 { animation-delay: 0.2s; }
-  .stagger-3 { animation-delay: 0.3s; }
-  .stagger-4 { animation-delay: 0.4s; }
-  .stagger-5 { animation-delay: 0.5s; }
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
+  .stagger-2 {
+    animation-delay: 0.2s;
+  }
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
+  .stagger-4 {
+    animation-delay: 0.4s;
+  }
+  .stagger-5 {
+    animation-delay: 0.5s;
+  }
 
   /* Text Gradient */
   .text-gradient-accent {
@@ -375,7 +415,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {

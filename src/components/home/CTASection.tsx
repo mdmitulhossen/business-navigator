@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight, Phone } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { ArrowRight, Phone } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const CTASection = () => {
   const { language, isRTL } = useLanguage();
@@ -14,12 +14,12 @@ const CTASection = () => {
 
       <div className="container-custom relative z-10">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6">
-            {language === 'en' 
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground dark:text-foreground mb-6">
+            {language === 'en'
               ? 'Ready to Start Your Business Journey?'
               : 'هل أنت مستعد لبدء رحلة أعمالك؟'}
           </h2>
-          <p className="text-lg text-primary-foreground/80 mb-10">
+          <p className="text-lg text-primary-foreground/80 mb-10 dark:text-foreground/80">
             {language === 'en'
               ? 'Get expert guidance and support for establishing your business in Saudi Arabia. Book a free consultation today!'
               : 'احصل على إرشاد ودعم الخبراء لتأسيس أعمالك في المملكة العربية السعودية. احجز استشارة مجانية اليوم!'}
@@ -39,7 +39,7 @@ const CTASection = () => {
               asChild
               variant="outline"
               size="lg"
-              className="border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8 py-6 text-base font-semibold rounded-lg"
+              className="border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 dark:border-foreground/30 dark:text-foreground dark:hover:bg-foreground/10 px-8 py-6 text-base font-semibold rounded-lg"
             >
               <a href="tel:+966112345678">
                 <Phone className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />

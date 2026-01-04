@@ -11,9 +11,11 @@ export const services = [
     icon: 'FileText',
     titleKey: 'services.businessLicense',
     descKey: 'services.businessLicenseDesc',
+    requirements: ['Valid identification documents', 'Business plan', 'Financial statements', 'Proof of address'],
+    process: ['Submit application online', 'Document verification', 'Pay fees', 'Receive license'],
     subServices: [
-      { id: 'misa', title: 'MISA', titleAr: 'ميسا' },
-      { id: 'mci', title: 'MCI', titleAr: 'وزارة التجارة' },
+      { id: 'misa', title: 'MISA', titleAr: 'ميسا', requirements: ['MISA registration form', 'Company registration certificate', 'Authorized signatory documents', 'Business activity description'], process: ['Access MISA portal', 'Fill application form', 'Upload documents', 'Submit for review', 'Approval notification'] },
+      { id: 'mci', title: 'MCI', titleAr: 'وزارة التجارة', requirements: ['MCI application form', 'Trade license application', 'Tax identification number', 'Business location proof'], process: ['Register on MCI platform', 'Complete application', 'Attach required documents', 'Payment of fees', 'License issuance'] },
     ],
   },
   {
@@ -21,6 +23,8 @@ export const services = [
     icon: 'Edit',
     titleKey: 'services.amendment',
     descKey: 'services.amendmentDesc',
+    requirements: ['Current license', 'Amendment details', 'Supporting documents'],
+    process: ['Prepare amendment request', 'Submit to authorities', 'Review and approval', 'License update'],
     subServices: [
       { id: 'activities', title: 'Activities', titleAr: 'الأنشطة' },
       { id: 'position', title: 'Position', titleAr: 'المناصب' },
@@ -31,24 +35,28 @@ export const services = [
     icon: 'Building2',
     titleKey: 'services.govService',
     descKey: 'services.govServiceDesc',
+    requirements: ['Valid documents', 'Application forms', 'Payment of fees'],
+    process: ['Select service type', 'Prepare documents', 'Submit application', 'Follow up', 'Receive service'],
     subServices: [
       {
         id: 'immigration',
         title: 'Immigration And Visa',
         titleAr: 'الهجرة والتأشيرات',
+        requirements: ['Valid passport', 'Medical certificate', 'Employment contract', 'Background check'],
+        process: ['Submit visa application', 'Biometric data collection', 'Medical examination', 'Visa approval'],
         children: [
-          { id: 'golden-visa', title: 'Golden Visa', titleAr: 'التأشيرة الذهبية' },
-          { id: 'residence-visa', title: 'Residence Visa', titleAr: 'تأشيرة الإقامة' },
-          { id: 'working-visa', title: 'Working Visa', titleAr: 'تأشيرة العمل' },
+          { id: 'golden-visa', title: 'Golden Visa', titleAr: 'التأشيرة الذهبية', requirements: ['Investment proof', 'Business plan', 'Qualification documents'], process: ['Apply for golden visa', 'Document verification', 'Investment approval', 'Visa issuance'] },
+          { id: 'residence-visa', title: 'Residence Visa', titleAr: 'تأشيرة الإقامة', requirements: ['Sponsorship letter', 'Financial proof', 'Accommodation proof'], process: ['Find sponsor', 'Submit application', 'Approval', 'Visa stamping'] },
+          { id: 'working-visa', title: 'Working Visa', titleAr: 'تأشيرة العمل', requirements: ['Job offer', 'Work permit', 'Medical check'], process: ['Job contract', 'Work permit application', 'Visa application', 'Entry'] },
         ]
       },
-      { id: 'vat', title: 'VAT', titleAr: 'ضريبة القيمة المضافة' },
-      { id: 'tax', title: 'Tax & Zakat', titleAr: 'الضرائب والزكاة' },
-      { id: 'accounting', title: 'Accounting Solution', titleAr: 'الحلول المحاسبية' },
-      { id: 'qiwa', title: 'Qiwa Service', titleAr: 'خدمة قوى' },
-      { id: 'muqeem', title: 'Muqeem', titleAr: 'مقيم' },
-      { id: 'national-address', title: 'National Address', titleAr: 'العنوان الوطني' },
-      { id: 'gosi', title: 'GOSI Service', titleAr: 'التأمينات الاجتماعية' },
+      { id: 'vat', title: 'VAT', titleAr: 'ضريبة القيمة المضافة', requirements: ['Business registration', 'Financial records', 'Tax ID'], process: ['Register for VAT', 'File returns', 'Pay taxes'] },
+      { id: 'tax', title: 'Tax & Zakat', titleAr: 'الضرائب والزكاة', requirements: ['Tax registration', 'Income records', 'Zakat calculation'], process: ['File tax return', 'Calculate Zakat', 'Pay obligations'] },
+      { id: 'accounting', title: 'Accounting Solution', titleAr: 'الحلول المحاسبية', requirements: ['Business documents', 'Financial data'], process: ['Setup accounting system', 'Record transactions', 'Generate reports'] },
+      { id: 'qiwa', title: 'Qiwa Service', titleAr: 'خدمة قوى', requirements: ['Labor documents', 'Company registration'], process: ['Register workers', 'Issue permits', 'Compliance monitoring'] },
+      { id: 'muqeem', title: 'Muqeem', titleAr: 'مقيم', requirements: ['Residency documents', 'ID proof'], process: ['Update information', 'Renew residency', 'Track status'] },
+      { id: 'national-address', title: 'National Address', titleAr: 'العنوان الوطني', requirements: ['Location details', 'Ownership proof'], process: ['Register address', 'Verification', 'Certificate issuance'] },
+      { id: 'gosi', title: 'GOSI Service', titleAr: 'التأمينات الاجتماعية', requirements: ['Employment contract', 'Salary details'], process: ['Register employee', 'Contribute premiums', 'Claim benefits'] },
     ],
   },
   {
@@ -56,6 +64,8 @@ export const services = [
     icon: 'Cpu',
     titleKey: 'services.aiIt',
     descKey: 'services.aiItDesc',
+    requirements: ['Project requirements', 'Technical specifications'],
+    process: ['Consultation', 'Planning', 'Development', 'Deployment'],
     subServices: [],
   },
   {
@@ -63,6 +73,8 @@ export const services = [
     icon: 'Palette',
     titleKey: 'services.design',
     descKey: 'services.designDesc',
+    requirements: ['Design brief', 'Brand guidelines'],
+    process: ['Concept development', 'Design creation', 'Revisions', 'Final delivery'],
     subServices: [],
   },
   {
@@ -70,6 +82,8 @@ export const services = [
     icon: 'Home',
     titleKey: 'services.realEstate',
     descKey: 'services.realEstateDesc',
+    requirements: ['Property details', 'Legal documents'],
+    process: ['Property search', 'Due diligence', 'Negotiation', 'Closing'],
     subServices: [],
   },
   {
@@ -77,6 +91,8 @@ export const services = [
     icon: 'Plane',
     titleKey: 'services.travel',
     descKey: 'services.travelDesc',
+    requirements: ['Travel itinerary', 'Passport details'],
+    process: ['Plan itinerary', 'Book services', 'Confirm arrangements', 'Travel assistance'],
     subServices: [],
   },
   {
@@ -84,6 +100,8 @@ export const services = [
     icon: 'Users',
     titleKey: 'services.manpower',
     descKey: 'services.manpowerDesc',
+    requirements: ['Job description', 'Company profile'],
+    process: ['Recruitment planning', 'Candidate screening', 'Interviewing', 'Placement'],
     subServices: [],
   },
 ];

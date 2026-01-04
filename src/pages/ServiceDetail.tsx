@@ -1,21 +1,25 @@
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import CTASection from '@/components/home/CTASection';
 import Layout from '@/components/layout/Layout';
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { services } from '@/data/demoData';
-import { Button } from '@/components/ui/button';
-import CTASection from '@/components/home/CTASection';
+import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
 
 const ServiceDetail = () => {
-  const { serviceId } = useParams();
+  const { serviceId, subId } = useParams();
   const { t, language, isRTL } = useLanguage();
 
   const service = services.find(s => s.id === serviceId);
 
+  const subService = subId ? service?.subServices?.find(s => s.id === subId) : null;
+  const currentService = subService || service;
+
   if (!service) {
     return (
       <Layout>
-        <div className="container-custom py-20 text-center">
+        <div className="container-custom py-10 text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">
             {language === 'en' ? 'Service not found' : 'الخدمة غير موجودة'}
           </h1>
@@ -32,21 +36,21 @@ const ServiceDetail = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative py-20 bg-gradient-hero overflow-hidden">
-        <div className="absolute inset-0 bg-primary/90" />
+      <section className="relative pt-10 pb-10 bg-gradient-hero overflow-hidden">
+        <div className="absolute inset-0 bg-primary/90 dark:bg-background/20" />
         <div className="container-custom relative z-10">
           <Link
             to="/services"
-            className={`inline-flex items-center text-primary-foreground/70 hover:text-primary-foreground mb-6 transition-colors ${isRTL ? 'flex-row-reverse' : ''}`}
+            className={`inline-flex items-center text-primary-foreground/70 hover:text-primary-foreground dark:text-foreground/70 dark:hover:text-foreground mb-6 transition-colors ${isRTL ? 'flex-row-reverse' : ''}`}
           >
             <ArrowLeft className={`w-4 h-4 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'}`} />
             {language === 'en' ? 'Back to Services' : 'العودة للخدمات'}
           </Link>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
-            {t(service.titleKey)}
+          <h1 className="font-display text-4xl md:text-5xl font-bold text-primary-foreground dark:text-foreground mb-4">
+            {(currentService as any).titleKey ? t((currentService as any).titleKey) : t((currentService as any).title)}
           </h1>
-          <p className="text-lg text-primary-foreground/80 max-w-2xl">
-            {t(service.descKey)}
+          <p className="text-lg text-primary-foreground/80 dark:text-muted-foreground max-w-2xl">
+            {subService ? t(service.descKey) : t((currentService as any).descKey)}
           </p>
         </div>
       </section>
@@ -60,7 +64,7 @@ const ServiceDetail = () => {
               <h2 className="font-display text-2xl font-bold text-foreground mb-6">
                 {language === 'en' ? 'What We Offer' : 'ما نقدمه'}
               </h2>
-              
+
               <div className="prose prose-lg max-w-none text-muted-foreground mb-8">
                 <p>
                   {language === 'en'
@@ -121,6 +125,42 @@ const ServiceDetail = () => {
                 </Button>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Requirements Section */}
+      <section className="section-padding bg-muted/30">
+        <div className="container-custom">
+          <h2 className="font-display text-2xl font-bold text-foreground mb-6">
+            {language === 'en' ? 'Requirements' : 'المتطلبات'}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {(currentService as any).requirements?.map((req, index) => (
+              <div key={index} className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
+                <CheckCircle2 className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
+                <span className="text-foreground">{req}</span>
+              </div>
+            )) || <p>No requirements available</p>}
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="section-padding bg-background">
+        <div className="container-custom">
+          <h2 className="font-display text-2xl font-bold text-foreground mb-6">
+            {language === 'en' ? 'Process' : 'العملية'}
+          </h2>
+          <div className="space-y-4">
+            {(currentService as any).process?.map((step, index) => (
+              <div key={index} className="flex items-start gap-4 p-4 bg-card border border-border rounded-xl">
+                <div className="flex-shrink-0 w-8 h-8 bg-accent text-accent-foreground rounded-full flex items-center justify-center font-bold">
+                  {index + 1}
+                </div>
+                <span className="text-foreground">{step}</span>
+              </div>
+            )) || <p>No process available</p>}
           </div>
         </div>
       </section>

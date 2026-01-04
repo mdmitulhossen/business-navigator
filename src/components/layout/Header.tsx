@@ -1,19 +1,20 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Globe, Sun, Moon, Building2 } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { useTheme } from '@/contexts/ThemeContext';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuSub,
-  DropdownMenuSubTrigger,
   DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
+import { Building2, ChevronDown, Globe, Menu, Moon, Sun, X } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,6 +23,18 @@ const Header = () => {
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleNavClick = () => {
+    scrollToTop();
+    setIsOpen(false);
+  };
 
   const navLinks = [
     { path: '/', label: t('nav.home') },
@@ -51,8 +64,8 @@ const Header = () => {
       label: language === 'en' ? 'Gov Service Solution' : 'حلول الخدمات الحكومية',
       path: '/services/gov-service',
       children: [
-        { 
-          label: language === 'en' ? 'Immigration & Visa' : 'الهجرة والتأشيرات', 
+        {
+          label: language === 'en' ? 'Immigration & Visa' : 'الهجرة والتأشيرات',
           path: '/services/gov-service/immigration',
           children: [
             { label: language === 'en' ? 'Golden Visa' : 'التأشيرة الذهبية', path: '/services/gov-service/immigration/golden' },
@@ -86,7 +99,7 @@ const Header = () => {
       <div className="container-custom">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" onClick={scrollToTop} className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
               <Building2 className="w-6 h-6 text-primary-foreground" />
             </div>
@@ -102,6 +115,7 @@ const Header = () => {
               <Link
                 key={link.path}
                 to={link.path}
+                onClick={handleNavClick}
                 className={cn(
                   'px-4 py-2 text-sm font-medium transition-colors rounded-md',
                   isActive(link.path)
@@ -134,14 +148,14 @@ const Header = () => {
                               <DropdownMenuSubContent>
                                 {child.children.map((subChild: any) => (
                                   <DropdownMenuItem key={subChild.path} asChild>
-                                    <Link to={subChild.path}>{subChild.label}</Link>
+                                    <Link to={subChild.path} onClick={handleNavClick}>{subChild.label}</Link>
                                   </DropdownMenuItem>
                                 ))}
                               </DropdownMenuSubContent>
                             </DropdownMenuSub>
                           ) : (
                             <DropdownMenuItem key={child.path} asChild>
-                              <Link to={child.path}>{child.label}</Link>
+                              <Link to={child.path} onClick={handleNavClick}>{child.label}</Link>
                             </DropdownMenuItem>
                           )
                         ))}
@@ -149,7 +163,7 @@ const Header = () => {
                     </DropdownMenuSub>
                   ) : (
                     <DropdownMenuItem key={item.path} asChild>
-                      <Link to={item.path}>{item.label}</Link>
+                      <Link to={item.path} onClick={handleNavClick}>{item.label}</Link>
                     </DropdownMenuItem>
                   )
                 ))}
@@ -167,7 +181,7 @@ const Header = () => {
               <DropdownMenuContent align={isRTL ? 'end' : 'start'}>
                 {licenseSubItems.map((item) => (
                   <DropdownMenuItem key={item.path} asChild>
-                    <Link to={item.path}>{item.label}</Link>
+                    <Link to={item.path} onClick={handleNavClick}>{item.label}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -177,6 +191,7 @@ const Header = () => {
               <Link
                 key={link.path}
                 to={link.path}
+                onClick={handleNavClick}
                 className={cn(
                   'px-4 py-2 text-sm font-medium transition-colors rounded-md',
                   isActive(link.path)
@@ -243,30 +258,30 @@ const Header = () => {
               <Link
                 key={link.path}
                 to={link.path}
+                onClick={handleNavClick}
                 className={cn(
                   'block py-2 text-base font-medium transition-colors',
                   isActive(link.path) ? 'text-accent' : 'text-foreground/70'
                 )}
-                onClick={() => setIsOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
             <Link
               to="/services"
+              onClick={handleNavClick}
               className="block py-2 text-base font-medium text-foreground/70"
-              onClick={() => setIsOpen(false)}
             >
               {t('nav.services')}
             </Link>
             <Link
               to="/business-license"
+              onClick={handleNavClick}
               className="block py-2 text-base font-medium text-foreground/70"
-              onClick={() => setIsOpen(false)}
             >
               {t('nav.businessLicense')}
             </Link>
-            
+
             <div className="flex items-center gap-4 pt-4 border-t border-border">
               <Button
                 variant="ghost"
@@ -284,9 +299,9 @@ const Header = () => {
                 )}
               </Button>
             </div>
-            
+
             <Button asChild className="w-full bg-accent text-accent-foreground">
-              <Link to="/appointment" onClick={() => setIsOpen(false)}>
+              <Link to="/appointment" onClick={handleNavClick}>
                 {t('nav.appointment')}
               </Link>
             </Button>

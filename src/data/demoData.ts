@@ -32,9 +32,9 @@ export const services = [
     titleKey: 'services.govService',
     descKey: 'services.govServiceDesc',
     subServices: [
-      { 
-        id: 'immigration', 
-        title: 'Immigration And Visa', 
+      {
+        id: 'immigration',
+        title: 'Immigration And Visa',
         titleAr: 'الهجرة والتأشيرات',
         children: [
           { id: 'golden-visa', title: 'Golden Visa', titleAr: 'التأشيرة الذهبية' },
@@ -194,7 +194,7 @@ export const teamMembers = [
     nameAr: 'سارة العمري',
     roleEn: 'Head of Legal Consultations',
     roleAr: 'رئيس الاستشارات القانونية',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
   },
   {
     id: 3,
@@ -210,7 +210,7 @@ export const teamMembers = [
     nameAr: 'ليلى الحارثي',
     roleEn: 'Government Relations Advisor',
     roleAr: 'مستشارة علاقات حكومية',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
+    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
   },
 ];
 

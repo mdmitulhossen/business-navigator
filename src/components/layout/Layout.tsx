@@ -1,6 +1,7 @@
+import PrayerTimesWidget from '@/components/widgets/PrayerTimesWidget';
 import { ReactNode } from 'react';
-import Header from './Header';
 import Footer from './Footer';
+import Header from './Header';
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <PrayerTimesWidget />
     </div>
   );
 };

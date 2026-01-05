@@ -229,8 +229,8 @@ const HeroSection2 = () => {
             </div>
 
             {/* Bottom Left Video Preview */}
-            <div className="absolute bottom-4 md:bottom-8 left-4 md:left-8 z-20 group cursor-pointer" onClick={handleVideoFullscreen}>
-                <div className="relative rounded-lg overflow-hidden shadow-2xl border-2 border-white/20 hover:border-accent/50 transition-all duration-300 w-32 md:w-48 hover:shadow-accent/30">
+            <div className="absolute bottom-1 md:bottom-8 left-1 md:left-8 z-20 group cursor-pointer" onClick={handleVideoFullscreen}>
+                <div className="relative rounded-lg overflow-hidden shadow-2xl border-2 border-white/20 hover:border-accent/50 transition-all duration-300 w-20 md:w-48 hover:shadow-accent/30">
                     <video
                         ref={videoRef}
                         src={video2030}
@@ -246,7 +246,7 @@ const HeroSection2 = () => {
                         </div>
                     </div>
                     {/* Label */}
-                    <div className="absolute bottom-2 left-2 right-2 text-xs text-white bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                    <div className="absolute bottom-2 left-2 right-2 text-xs text-white bg-black/50 px-2 py-1 rounded backdrop-blur-sm hidden md:block">
                         Vision 2030
                     </div>
                 </div>

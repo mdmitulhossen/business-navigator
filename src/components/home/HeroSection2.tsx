@@ -1,19 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import bg1 from '@/assets/1.webp';
 import bg2 from '@/assets/2.webp';
+import video2030 from '@/assets/2030.webm';
 import bg3 from '@/assets/3.webp';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { ISourceOptions } from '@tsparticles/engine';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
-import { ArrowRight } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { ArrowRight, Play } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const HeroSection2 = () => {
     const { t, isRTL } = useLanguage();
     const [init, setInit] = useState(false);
     const [currentSlide, setCurrentSlide] = useState(0);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
     // Hero images for the slider
     // const heroImages = [
@@ -23,6 +26,16 @@ const HeroSection2 = () => {
     // ];
 
     const heroImages = [bg1, bg2, bg3];
+
+    const handleVideoFullscreen = () => {
+        if (videoRef.current) {
+            if (videoRef.current.requestFullscreen) {
+                videoRef.current.requestFullscreen();
+            } else if ((videoRef.current as any).webkitRequestFullscreen) {
+                (videoRef.current as any).webkitRequestFullscreen();
+            }
+        }
+    };
 
     useEffect(() => {
         initParticlesEngine(async (engine) => {
@@ -212,6 +225,30 @@ const HeroSection2 = () => {
             <div className="absolute bottom-2 md:bottom-8 left-1/2 -translate-x-1/2 -ml-2.5 animate-bounce z-20">
                 <div className="w-6 h-10 rounded-full border-2 border-white/40 flex items-start justify-center p-2 backdrop-blur-sm">
                     <div className="w-1 h-2 bg-white/60 rounded-full animate-scroll-down" />
+                </div>
+            </div>
+
+            {/* Bottom Left Video Preview */}
+            <div className="absolute bottom-4 md:bottom-8 left-4 md:left-8 z-20 group cursor-pointer" onClick={handleVideoFullscreen}>
+                <div className="relative rounded-lg overflow-hidden shadow-2xl border-2 border-white/20 hover:border-accent/50 transition-all duration-300 w-32 md:w-48 hover:shadow-accent/30">
+                    <video
+                        ref={videoRef}
+                        src={video2030}
+                        autoPlay
+                        loop
+                        muted
+                        className="w-full h-auto object-cover bg-black/80"
+                    />
+                    {/* Play Button Overlay */}
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
+                        <div className="w-12 h-12 md:w-16 md:h-16 bg-accent/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                            <Play className="w-6 h-6 md:w-8 md:h-8 text-white fill-white" />
+                        </div>
+                    </div>
+                    {/* Label */}
+                    <div className="absolute bottom-2 left-2 right-2 text-xs text-white bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                        Vision 2030
+                    </div>
                 </div>
             </div>
         </section>

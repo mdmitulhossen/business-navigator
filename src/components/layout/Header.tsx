@@ -103,17 +103,17 @@ const Header = () => {
             <img
               src="/logo.png"
               alt="Souda Investment Logo"
-              className="h-12 w-auto object-contain"
+              className="h-8 md:h-12 w-auto object-contain"
               onError={(e) => e.currentTarget.style.display = 'none'}
             />
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <span className="font-display font-bold text-base md:text-lg text-foreground leading-tight">
                 {language === 'en' ? 'Souda Investment' : 'السعودي الاستثمار'}
               </span>
               <span className="text-xs text-muted-foreground">
                 {language === 'en' ? 'Consultant' : 'والمستشار'}
               </span>
-            </div>
+            </div> */}
           </Link>
 
           {/* Desktop Navigation */}

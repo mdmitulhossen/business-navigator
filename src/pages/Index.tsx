@@ -1,5 +1,5 @@
 import CTASection from '@/components/home/CTASection';
-import HeroSection from '@/components/home/HeroSection';
+import HeroSection2 from '@/components/home/HeroSection2';
 import ProcessSection from '@/components/home/ProcessSection';
 import ServicesSection from '@/components/home/ServicesSection';
 import StatsSection from '@/components/home/StatsSection';
@@ -9,11 +9,11 @@ import Layout from '@/components/layout/Layout';
 const Index = () => {
   return (
     <Layout>
-      <HeroSection />
+      <HeroSection2 />
       <StatsSection />
-      <TrustPartners />
       <ServicesSection />
       <ProcessSection />
+      <TrustPartners />
       <CTASection />
     </Layout>
   );

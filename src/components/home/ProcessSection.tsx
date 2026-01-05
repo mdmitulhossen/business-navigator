@@ -1,5 +1,5 @@
-import { FileCheck, Award, Rocket } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Award, FileCheck, Rocket } from 'lucide-react';
 
 const ProcessSection = () => {
   const { language } = useLanguage();
@@ -11,23 +11,23 @@ const ProcessSection = () => {
       titleAr: 'التوثيق',
       descEn: 'We help you complete all legal groundwork, licensing, and documentation needed to officially establish your company in Saudi Arabia.',
       descAr: 'نساعدك في إكمال جميع الأعمال القانونية والتراخيص والوثائق اللازمة لتأسيس شركتك رسمياً في المملكة العربية السعودية.',
-      items: language === 'en' 
+      items: language === 'en'
         ? [
-            'Define business activity & Saudization requirements',
-            'Prepare BOD Resolution, POA & AoA',
-            'Collect and notarize required documents',
-            'Name reservation & MISA license application',
-            'AoA approval & publication',
-            'Commercial Registration (CR) & Chamber of Commerce registration',
-          ]
+          'Define business activity & Saudization requirements',
+          'Prepare BOD Resolution, POA & AoA',
+          'Collect and notarize required documents',
+          'Name reservation & MISA license application',
+          'AoA approval & publication',
+          'Commercial Registration (CR) & Chamber of Commerce registration',
+        ]
         : [
-            'تحديد النشاط التجاري ومتطلبات السعودة',
-            'إعداد قرار مجلس الإدارة والتوكيل والنظام الأساسي',
-            'جمع وتوثيق المستندات المطلوبة',
-            'حجز الاسم وتقديم طلب ترخيص ميسا',
-            'الموافقة على النظام الأساسي ونشره',
-            'السجل التجاري وتسجيل الغرفة التجارية',
-          ],
+          'تحديد النشاط التجاري ومتطلبات السعودة',
+          'إعداد قرار مجلس الإدارة والتوكيل والنظام الأساسي',
+          'جمع وتوثيق المستندات المطلوبة',
+          'حجز الاسم وتقديم طلب ترخيص ميسا',
+          'الموافقة على النظام الأساسي ونشره',
+          'السجل التجاري وتسجيل الغرفة التجارية',
+        ],
     },
     {
       icon: Award,
@@ -37,19 +37,19 @@ const ProcessSection = () => {
       descAr: 'ندير جميع التسجيلات الهامة مع وزارة العمل والتأمينات الاجتماعية وهيئة الزكاة والضريبة للحفاظ على امتثال أعمالك.',
       items: language === 'en'
         ? [
-            'Company stamp issuance',
-            'MoL, GOSI & National Address (SPL) registration',
-            'ZATCA & VAT registration',
-            'General Manager visa application',
-            'ENJAZE delegation & attestation',
-          ]
+          'Company stamp issuance',
+          'MoL, GOSI & National Address (SPL) registration',
+          'ZATCA & VAT registration',
+          'General Manager visa application',
+          'ENJAZE delegation & attestation',
+        ]
         : [
-            'إصدار ختم الشركة',
-            'تسجيل وزارة العمل والتأمينات والعنوان الوطني',
-            'تسجيل الزكاة وضريبة القيمة المضافة',
-            'طلب تأشيرة المدير العام',
-            'تفويض وتصديق إنجاز',
-          ],
+          'إصدار ختم الشركة',
+          'تسجيل وزارة العمل والتأمينات والعنوان الوطني',
+          'تسجيل الزكاة وضريبة القيمة المضافة',
+          'طلب تأشيرة المدير العام',
+          'تفويض وتصديق إنجاز',
+        ],
     },
     {
       icon: Rocket,
@@ -59,19 +59,19 @@ const ProcessSection = () => {
       descAr: 'تصبح شركتك نشطة بالكامل مع إتمام جميع البوابات والتصاريح والإجراءات البنكية.',
       items: language === 'en'
         ? [
-            'GM visit, border number & work permit',
-            'Iqama issuance, medical test & insurance',
-            'MoL activation & Chamber reactivation',
-            'Absher, Qiwa, Muqeem & Mudad activation',
-            'Corporate bank account setup',
-          ]
+          'GM visit, border number & work permit',
+          'Iqama issuance, medical test & insurance',
+          'MoL activation & Chamber reactivation',
+          'Absher, Qiwa, Muqeem & Mudad activation',
+          'Corporate bank account setup',
+        ]
         : [
-            'زيارة المدير العام ورقم الحدود وتصريح العمل',
-            'إصدار الإقامة والفحص الطبي والتأمين',
-            'تفعيل وزارة العمل وإعادة تفعيل الغرفة',
-            'تفعيل أبشر وقوى ومقيم ومدد',
-            'فتح حساب بنكي للشركة',
-          ],
+          'زيارة المدير العام ورقم الحدود وتصريح العمل',
+          'إصدار الإقامة والفحص الطبي والتأمين',
+          'تفعيل وزارة العمل وإعادة تفعيل الغرفة',
+          'تفعيل أبشر وقوى ومقيم ومدد',
+          'فتح حساب بنكي للشركة',
+        ],
     },
   ];
 
@@ -80,13 +80,13 @@ const ProcessSection = () => {
       <div className="container-custom">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
-          <span className="badge-accent mb-4 inline-block">
+          <span className="badge-primary mb-4 inline-block">
             {language === 'en' ? 'HOW WE WORK' : 'كيف نعمل'}
           </span>
           <h2 className="heading-section text-foreground mb-4">
             {language === 'en' ? 'Our Process' : 'عمليتنا'}
           </h2>
-          <div className="w-16 h-1 bg-accent mx-auto rounded-full" />
+          <div className="w-16 h-1 bg-primary mx-auto rounded-full" />
         </div>
 
         {/* Process Steps */}
@@ -94,14 +94,12 @@ const ProcessSection = () => {
           {steps.map((step, index) => (
             <div
               key={index}
-              className={`relative bg-card border border-border rounded-2xl p-6 md:p-8 card-hover ${
-                index === 1 ? 'bg-secondary/50' : ''
-              }`}
+              className={`relative bg-card border border-border rounded-2xl p-6 md:p-8 card-hover ${index === 1 ? 'bg-secondary/50' : ''
+                }`}
             >
               {/* Icon */}
-              <div className={`w-16 h-16 rounded-xl flex items-center justify-center mb-6 ${
-                index === 1 ? 'bg-accent/20' : 'bg-muted'
-              }`}>
+              <div className={`w-16 h-16 rounded-xl flex items-center justify-center mb-6 ${index === 1 ? 'bg-accent/20' : 'bg-muted'
+                }`}>
                 <step.icon className={`w-8 h-8 ${index === 1 ? 'text-accent' : 'text-primary'}`} />
               </div>
 

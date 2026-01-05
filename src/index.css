@@ -274,6 +274,9 @@
     @apply inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium bg-accent/20 text-accent;
   }
 
+  .badge-primary {
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium bg-primary/20 text-primary;
+  }
   /* Form Styles */
   .form-input {
     @apply w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-200;

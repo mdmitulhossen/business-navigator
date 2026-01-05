@@ -1,3 +1,4 @@
+import breadCrumbBG from '@/assets/3.webp';
 import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { blogPosts } from '@/data/demoData';
@@ -19,8 +20,12 @@ const Blog = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative py-20 bg-gradient-hero overflow-hidden">
-        <div className="absolute inset-0 bg-primary/90 dark:bg-background/20" />
+      <section className="relative py-20 overflow-hidden" style={{
+        backgroundImage: `url(${breadCrumbBG})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
+        <div className="absolute inset-0 bg-primary/60 dark:bg-background/40" />
         <div className="container-custom relative z-10 text-center">
           <span className="badge-accent mb-4 inline-block">{t('blog.label')}</span>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4 dark:text-foreground">

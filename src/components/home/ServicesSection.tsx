@@ -23,11 +23,11 @@ const ServicesSection = () => {
       <div className="container-custom">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
-          <span className="badge-accent mb-4 inline-block">{t('services.label')}</span>
+          <span className="badge-primary mb-4 inline-block">{t('services.label')}</span>
           <h2 className="heading-section text-foreground mb-4">
             {t('services.title')}
           </h2>
-          <div className="w-16 h-1 bg-accent mx-auto rounded-full" />
+          <div className="w-16 h-1 bg-primary mx-auto rounded-full" />
         </div>
 
         {/* Services Grid */}
@@ -50,7 +50,7 @@ const ServicesSection = () => {
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
                   {t(service.descKey)}
                 </p>
-                <span className={`inline-flex items-center text-sm font-medium text-accent ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <span className={`inline-flex items-center text-sm font-medium text-primary ${isRTL ? 'flex-row-reverse' : ''}`}>
                   {t('common.learnMore')}
                   <ArrowRight className={`w-4 h-4 ${isRTL ? 'mr-1 rotate-180' : 'ml-1'} group-hover:translate-x-1 transition-transform`} />
                 </span>

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import breadCrumbBG from '@/assets/3.webp';
 import SimpleParticles from '@/components/animations/SimpleParticles';
 import CTASection from '@/components/home/CTASection';
 import Layout from '@/components/layout/Layout';
@@ -37,9 +38,13 @@ const ServiceDetail = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative pt-10 pb-10 bg-gradient-hero overflow-hidden">
+      <section className="relative pt-10 pb-10 overflow-hidden" style={{
+        backgroundImage: `url(${breadCrumbBG})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
         <SimpleParticles count={30} />
-        <div className="absolute inset-0 bg-primary/90 dark:bg-background/20" />
+        <div className="absolute inset-0 bg-primary/60 dark:bg-background/40" />
         <div className="container-custom relative z-10">
           <Link
             to="/services"

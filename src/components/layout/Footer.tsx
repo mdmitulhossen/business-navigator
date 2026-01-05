@@ -27,14 +27,14 @@ const Footer = () => {
                 className="h-10 w-auto object-contain"
                 onError={(e) => e.currentTarget.style.display = 'none'}
               />
-              <div className="flex flex-col">
+              {/* <div className="flex flex-col">
                 <span className="font-display font-bold text-base text-primary-foreground dark:text-slate-100">
                   {language === 'en' ? 'Souda Investment' : 'السعودي الاستثمار'}
                 </span>
                 <span className="text-xs text-primary-foreground/70 dark:text-slate-500">
                   {language === 'en' ? 'Consultant' : 'والمستشار'}
                 </span>
-              </div>
+              </div> */}
             </Link>
             <p className="text-sm text-primary-foreground/80 dark:text-slate-500 mb-6 leading-relaxed">
               {t('footer.description')}

@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import { Calendar, User, ArrowRight } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { blogPosts } from '@/data/demoData';
+import { ArrowRight, Calendar, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Blog = () => {
   const { t, language, isRTL } = useLanguage();
@@ -20,10 +20,10 @@ const Blog = () => {
     <Layout>
       {/* Hero */}
       <section className="relative py-20 bg-gradient-hero overflow-hidden">
-        <div className="absolute inset-0 bg-primary/90" />
+        <div className="absolute inset-0 bg-primary/90 dark:bg-background/20" />
         <div className="container-custom relative z-10 text-center">
           <span className="badge-accent mb-4 inline-block">{t('blog.label')}</span>
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4">
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4 dark:text-foreground">
             {t('blog.title')}
           </h1>
           <div className="w-16 h-1 bg-accent mx-auto rounded-full" />

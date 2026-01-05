@@ -388,12 +388,12 @@ const BusinessLicense = () => {
         </section >
 
         {/* CTA */}
-        < section className="py-20 bg-primary text-primary-foreground" >
+        < section className="py-20 bg-primary text-primary-foreground dark:bg-background/20" >
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-foreground">
               {language === 'en' ? 'Ready to Start Your Business?' : 'مستعد لبدء عملك؟'}
             </h2>
-            <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8">
+            <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8 dark:text-muted-foreground">
               {language === 'en'
                 ? 'Contact our experts today and get your business license in Saudi Arabia with confidence.'
                 : 'اتصل بخبرائنا اليوم واحصل على رخصة عملك في المملكة العربية السعودية بثقة.'}
@@ -405,7 +405,7 @@ const BusinessLicense = () => {
                   {language === 'en' ? 'Book Consultation' : 'احجز استشارة'}
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 dark:border-foreground/30 dark:text-foreground dark:hover:bg-foreground/10">
                 <Link to="/contact">
                   <Mail className="w-5 h-5 mr-2" />
                   {language === 'en' ? 'Contact Sales' : 'اتصل بالمبيعات'}

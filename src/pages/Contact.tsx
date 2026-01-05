@@ -66,7 +66,7 @@ const Contact = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Info */}
             <div>
-              <div className="bg-primary text-primary-foreground rounded-2xl p-8 mb-8">
+              <div className="bg-muted rounded-2xl p-8 mb-8">
                 <h2 className="font-display font-bold text-2xl mb-8 text-accent">
                   {t('contact.office')}
                 </h2>
@@ -77,7 +77,7 @@ const Contact = () => {
                         <item.icon className="w-5 h-5 text-accent" />
                       </div>
                       <div>
-                        <p className="text-sm text-primary-foreground/70 mb-1">
+                        <p className="text-sm text-primary-foreground/70 mb-1 dark:text-foreground/70">
                           {t(item.labelKey)}
                         </p>
                         <p className="font-medium" dir={item.labelKey === 'contact.phoneLabel' ? 'ltr' : undefined}>

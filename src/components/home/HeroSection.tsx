@@ -122,14 +122,14 @@ const HeroSection = () => {
           </div>
 
           {/* Title */}
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in-up">
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in-up dark:text-white">
             {t('hero.title')}{' '}
             <span className="text-accent">{t('hero.titleHighlight')}</span>{' '}
             {t('hero.titleEnd')}
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-10 animate-fade-in-up stagger-2">
+          <p className="text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-10 animate-fade-in-up stagger-2 dark:text-gray-300">
             {t('hero.subtitle')}
           </p>
 
@@ -149,7 +149,7 @@ const HeroSection = () => {
               asChild
               variant="outline"
               size="lg"
-              className="border-2 border-primary-foreground/30 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 px-8 py-6 text-base font-semibold rounded-lg z-50!"
+              className="border-2 border-primary-foreground/30 text-primary-foreground dark:border-gray-400 dark:text-gray-300 bg-transparent hover:bg-primary-foreground/10 px-8 py-6 text-base font-semibold rounded-lg z-50!"
             >
               <Link to="/services">{t('hero.cta2')}</Link>
             </Button>

@@ -149,8 +149,12 @@ const HeroSection2 = () => {
             <div className="container-custom relative z-20 md:py-20">
                 <div className="max-w-4xl mx-auto text-center">
                     {/* Badge */}
-                    <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent/20 text-accent mb-8 animate-fade-in backdrop-blur-sm border border-accent/30">
+                    {/* <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent/20 text-accent mb-8 animate-fade-in backdrop-blur-sm border border-accent/30">
                         <span className="text-sm font-medium">{t('hero.badge')}</span>
+                    </div> */}
+
+                    <div>
+                        <img src="/Saudi_Vision_2030_logo.svg" alt="Souda Investment Logo" className="h-16 scale-150 w-auto mx-auto mb-6 object-contain transition-all duration-300" onError={(e) => e.currentTarget.style.display = 'none'} />
                     </div>
 
                     {/* Title */}

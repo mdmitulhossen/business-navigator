@@ -99,21 +99,23 @@ const Header = () => {
       <div className="container-custom">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" onClick={scrollToTop} className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3 group">
             <img
-              src="/logo.png"
+              src="/logoWithoutText.png"
               alt="Souda Investment Logo"
-              className="h-8 md:h-12 w-auto object-contain"
+              className="sm:h-12 h-10 w-auto object-contain transition-all duration-300"
               onError={(e) => e.currentTarget.style.display = 'none'}
             />
-            {/* <div className="flex flex-col">
-              <span className="font-display font-bold text-base md:text-lg text-foreground leading-tight">
-                {language === 'en' ? 'Souda Investment' : 'السعودي الاستثمار'}
+            <div className="flex flex-col">
+              <span className="font-bold text-[10px] sm:text-xs text-primary dark:text-slate-100">
+                SAUDA INVESTMENT CONSULTANT
+                {/* {language === 'en' ? 'Souda Investment' : 'السعودي الاستثمار'} */}
               </span>
-              <span className="text-xs text-muted-foreground">
-                {language === 'en' ? 'Consultant' : 'والمستشار'}
+              <span className="sm:text-lg text-xs text-primary dark:text-slate-100">
+                السعودي الاستثمار والمستشار
+                {/* {language === 'en' ? 'Consultant' : 'والمستشار'} */}
               </span>
-            </div> */}
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

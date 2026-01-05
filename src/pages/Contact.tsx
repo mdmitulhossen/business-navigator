@@ -67,17 +67,17 @@ const Contact = () => {
             {/* Contact Info */}
             <div>
               <div className="bg-muted rounded-2xl p-8 mb-8">
-                <h2 className="font-display font-bold text-2xl mb-8 text-accent">
+                <h2 className="font-display font-bold text-2xl mb-8 text-primary">
                   {t('contact.office')}
                 </h2>
                 <ul className="space-y-6">
                   {contactInfo.map((item) => (
                     <li key={item.labelKey} className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
-                        <item.icon className="w-5 h-5 text-accent" />
+                      <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                        <item.icon className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <p className="text-sm text-primary-foreground/70 mb-1 dark:text-foreground/70">
+                        <p className="text-sm text-primary mb-1 dark:text-foreground/70">
                           {t(item.labelKey)}
                         </p>
                         <p className="font-medium" dir={item.labelKey === 'contact.phoneLabel' ? 'ltr' : undefined}>
@@ -92,7 +92,7 @@ const Contact = () => {
               {/* Map Placeholder */}
               <div className="bg-muted rounded-2xl h-64 flex items-center justify-center">
                 <div className="text-center text-muted-foreground">
-                  <MapPin className="w-12 h-12 mx-auto mb-2 text-accent" />
+                  <MapPin className="w-12 h-12 mx-auto mb-2 text-primary" />
                   <p>{language === 'en' ? '(Google Maps)' : '(خريطة جوجل)'}</p>
                 </div>
               </div>

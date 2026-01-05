@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
-import { FileText, Edit, Building2, Cpu, Palette, Home, Plane, Users, ArrowRight } from 'lucide-react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useLanguage } from '@/contexts/LanguageContext';
 import { services } from '@/data/demoData';
+import { ArrowRight, Building2, Cpu, Edit, FileText, Home, Palette, Plane, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const iconMap: Record<string, React.ComponentType<any>> = {
   FileText,

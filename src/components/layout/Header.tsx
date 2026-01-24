@@ -242,14 +242,15 @@ const Header = () => {
             </Button>
 
             {/* CTA Button */}
-            <Button asChild className="hidden md:flex bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleNavClick}>
-              <Link to="/appointment">{t('nav.appointment')}</Link>
-            </Button>
-            <Button asChild className="hidden md:flex bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleNavClick}>
+               <Button asChild className="hidden md:flex bg-primary text-white hover:bg-primary/90" onClick={handleNavClick}>
               <Link to="/explore-saudi">
                 {t('nav.ksa')}
               </Link>
             </Button>
+            <Button asChild className="hidden md:flex bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleNavClick}>
+              <Link to="/appointment">{t('nav.appointment')}</Link>
+            </Button>
+         
 
             {/* Mobile Menu Button */}
             <Button

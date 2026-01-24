@@ -1,3 +1,4 @@
+import FlightBookingWidget from '@/components/widgets/FlightBookingWidget';
 import PrayerTimesWidget from '@/components/widgets/PrayerTimesWidget';
 import { useTawkTo } from '@/hooks/use-tawk-to';
 import { ReactNode } from 'react';
@@ -19,6 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
       <main className="flex-1">{children}</main>
       <Footer />
       <PrayerTimesWidget />
+      <FlightBookingWidget />
       <WhatsAppWidget />
     </div>
   );

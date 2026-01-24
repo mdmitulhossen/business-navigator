@@ -4,6 +4,7 @@ import ProcessSection from '@/components/home/ProcessSection';
 import ServicesSection from '@/components/home/ServicesSection';
 import StatsSection from '@/components/home/StatsSection';
 import TrustPartners from '@/components/home/TrustPartners';
+import VisionOverview from '@/components/home/VisionOverview';
 import Layout from '@/components/layout/Layout';
 
 const Index = () => {
@@ -12,6 +13,7 @@ const Index = () => {
       <HeroSection2 />
       <StatsSection />
       <ServicesSection />
+      <VisionOverview/>
       <ProcessSection />
       <TrustPartners />
       <CTASection />

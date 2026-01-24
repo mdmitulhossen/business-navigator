@@ -119,7 +119,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1">
             {navLinks.slice(0, 1).map((link) => (
               <Link
                 key={link.path}
@@ -242,8 +242,13 @@ const Header = () => {
             </Button>
 
             {/* CTA Button */}
-            <Button asChild className="hidden md:flex bg-accent text-accent-foreground hover:bg-accent/90">
+            <Button asChild className="hidden md:flex bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleNavClick}>
               <Link to="/appointment">{t('nav.appointment')}</Link>
+            </Button>
+            <Button asChild className="hidden md:flex bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleNavClick}>
+              <Link to="/explore-saudi">
+                {t('nav.ksa')}
+              </Link>
             </Button>
 
             {/* Mobile Menu Button */}
@@ -261,7 +266,7 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="lg:hidden border-t border-border bg-background animate-fade-in">
+        <div className="xl:hidden border-t border-border bg-background animate-fade-in">
           <div className="container-custom py-4 space-y-4">
             {navLinks.map((link) => (
               <Link
@@ -312,6 +317,12 @@ const Header = () => {
             <Button asChild className="w-full bg-accent text-accent-foreground">
               <Link to="/appointment" onClick={handleNavClick}>
                 {t('nav.appointment')}
+              </Link>
+            </Button>
+
+            <Button asChild className="w-full bg-accent text-accent-foreground">
+              <Link to="/explore-saudi" onClick={handleNavClick}>
+                {t('nav.ksa')}
               </Link>
             </Button>
           </div>

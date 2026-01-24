@@ -11,6 +11,7 @@ import Appointment from "./pages/Appointment";
 import Blog from "./pages/Blog";
 import BusinessLicense from "./pages/BusinessLicense";
 import Contact from "./pages/Contact";
+import ExploreSaudi from "./pages/ExploreSaudi";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import ServiceDetail from "./pages/ServiceDetail";
@@ -30,6 +31,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/explore-saudi" element={<ExploreSaudi />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/services/:serviceId" element={<ServiceDetail />} />
                 <Route path="/services/:serviceId/:subId" element={<ServiceDetail />} />

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 type Language = 'en' | 'ar';
 
@@ -19,6 +19,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.about': 'About Us',
     'nav.contact': 'Contact',
     'nav.appointment': 'Book Appointment',
+    'nav.ksa': 'Explore KSA',
     
     // Hero
     'hero.badge': 'Vision 2030 - Building the Future',

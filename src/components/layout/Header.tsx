@@ -99,9 +99,9 @@ const Header = () => {
       {/* First Layer: Top Bar */}
       <div className="bg-muted/50 border-b border-border/40">
         <div className="container-custom">
-          <div className="flex h-10 items-center justify-between text-xs sm:text-sm flex-wrap">
+          <div className="flex h-10 items-center justify-end lg:justify-between text-xs sm:text-sm flex-wrap">
             {/* Left: Address and Phone */}
-            <div className="flex items-center gap-4 text-foreground/70 flex-wrap">
+            <div className="hidden lg:flex items-center gap-4 text-foreground/70 flex-wrap">
               <div className="flex items-center gap-1">
                 <MapPin className="w-4 h-4" />
                 <span>Kingdom of Saudi Arabia, Riyadh, Olaya District, King Fahd Road</span>

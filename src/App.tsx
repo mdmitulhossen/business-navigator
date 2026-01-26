@@ -14,6 +14,7 @@ import Contact from "./pages/Contact";
 import ExploreSaudi from "./pages/ExploreSaudi";
 import FlightBooking from "./pages/FlightBooking";
 import Index from "./pages/Index";
+import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import ServiceDetail from "./pages/ServiceDetail";
 import Services from "./pages/Services";
@@ -43,6 +44,7 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/appointment" element={<Appointment />} />
                 <Route path="/flight-booking" element={<FlightBooking />} />
+                <Route path="/login" element={<Login />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

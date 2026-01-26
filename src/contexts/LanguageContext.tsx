@@ -20,6 +20,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.contact': 'Contact',
     'nav.appointment': 'Book Appointment',
     'nav.ksa': 'Explore KSA',
+    'nav.login': 'Login',
     
     // Hero
     'hero.badge': 'Vision 2030 - Building the Future',
@@ -136,6 +137,9 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.about': 'من نحن',
     'nav.contact': 'تواصل معنا',
     'nav.appointment': 'حجز موعد',
+    'nav.ksa': 'استكشف السعودية',
+    'nav.login': 'تسجيل الدخول',
+
     
     // Hero
     'hero.badge': 'رؤية 2030 - بناء المستقبل',

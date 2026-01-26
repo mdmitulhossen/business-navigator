@@ -12,7 +12,7 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
-import { ChevronDown, Globe, Menu, Moon, Sun, X } from 'lucide-react';
+import { ChevronDown, Globe, LogIn, MapPin, Menu, Moon, Phone, Sun, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -96,6 +96,32 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      {/* First Layer: Top Bar */}
+      <div className="bg-muted/50 border-b border-border/40">
+        <div className="container-custom">
+          <div className="flex h-10 items-center justify-between text-xs sm:text-sm flex-wrap">
+            {/* Left: Address and Phone */}
+            <div className="flex items-center gap-4 text-foreground/70 flex-wrap">
+              <div className="flex items-center gap-1">
+                <MapPin className="w-4 h-4" />
+                <span>Kingdom of Saudi Arabia, Riyadh, Olaya District, King Fahd Road</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Phone className="w-4 h-4" />
+                <span>+966 11 234 5678</span>
+              </div>
+            </div>
+            {/* Right: Login Button */}
+            <Button asChild variant="ghost" className="text-foreground/70 hover:text-foreground hover:bg-muted">
+              <Link to="/login">
+                <LogIn className="w-4 h-4 mr-2" />
+                {t('nav.login')}
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+      {/* Second Layer: Existing Header */}
       <div className="container-custom">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}

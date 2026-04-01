@@ -2,12 +2,13 @@ import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { serviceCategories, serviceCategoriesAr } from '@/data/demoData';
+import { useCreateAppointment, useFetchAppointments } from '@/services/useBookAppointmentService';
+import { useFetchServices } from '@/services/useService';
 import { Building2, Calendar, CheckCircle, Clock, Mail, Phone, User } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const Appointment = () => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     date: '',
@@ -19,12 +20,31 @@ const Appointment = () => {
     service: '',
     notes: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const categories = language === 'en' ? serviceCategories : serviceCategoriesAr;
+  const timeSlots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
 
-  const timeSlots = [
-    '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'
-  ];
+  const createAppointmentMutation = useCreateAppointment();
+  const { data: appointmentsData, isLoading: isAppointmentsLoading } = useFetchAppointments({ limit: 1000 }, true);
+  const { data: servicesData, isLoading: isServicesLoading } = useFetchServices({ isActive: true, limit: 1000 }, true);
+
+  const serviceOptions = servicesData?.data ?? [];
+
+  const today = new Date();
+  const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString().split('T')[0];
+
+  const bookedSlotsForSelectedDate = useMemo(() => {
+    if (!formData.date) return new Set<string>();
+
+    const selectedDateKey = formData.date;
+    const booked = (appointmentsData?.data ?? [])
+      .filter((appointment) => appointment.date?.slice(0, 10) === selectedDateKey)
+      .map((appointment) => appointment.slotTime);
+
+    return new Set(booked);
+  }, [appointmentsData?.data, formData.date]);
+
+  const isSelectedSlotBooked = formData.time ? bookedSlotsForSelectedDate.has(formData.time) : false;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData(prev => ({
@@ -33,10 +53,27 @@ const Appointment = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Appointment booked:', formData);
-    setStep(3);
+
+    if (isSelectedSlotBooked) return;
+
+    try {
+      setIsSubmitting(true);
+      await createAppointmentMutation.mutateAsync({
+        name: formData.name.trim(),
+        phoneNumber: formData.phone.trim(),
+        email: formData.email.trim(),
+        companyName: formData.company.trim(),
+        service: formData.service,
+        additionalNotes: formData.notes.trim() || undefined,
+        date: new Date(`${formData.date}T00:00:00.000Z`).toISOString(),
+        slotTime: formData.time,
+      });
+      setStep(3);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -91,7 +128,7 @@ const Appointment = () => {
                     value={formData.date}
                     onChange={handleChange}
                     className="form-input"
-                    min={new Date().toISOString().split('T')[0]}
+                    min={minDate}
                     required
                   />
                 </div>
@@ -101,27 +138,46 @@ const Appointment = () => {
                     <Clock className="w-4 h-4" />
                     {language === 'en' ? 'Select Time' : 'اختر الوقت'}
                   </label>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                     {timeSlots.map((time) => (
                       <button
                         key={time}
                         type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, time }))}
+                        onClick={() => {
+                          if (!bookedSlotsForSelectedDate.has(time)) {
+                            setFormData(prev => ({ ...prev, time }));
+                          }
+                        }}
+                        disabled={isAppointmentsLoading || bookedSlotsForSelectedDate.has(time)}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${formData.time === time
                             ? 'bg-accent text-accent-foreground'
-                            : 'bg-muted text-foreground hover:bg-muted/80'
+                            : bookedSlotsForSelectedDate.has(time)
+                              ? 'cursor-not-allowed bg-rose-500/10 text-rose-700 line-through opacity-70 dark:text-rose-300'
+                              : 'bg-muted text-foreground hover:bg-muted/80'
                           }`}
                       >
-                        {time}
+                        <span className="block">{time}</span>
+                        {bookedSlotsForSelectedDate.has(time) ? (
+                          <span className="block text-sm font-bold uppercase tracking-wide">Booked</span>
+                        ) : null}
                       </button>
                     ))}
                   </div>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    {isAppointmentsLoading
+                      ? language === 'en'
+                        ? 'Checking available slots...'
+                        : 'جارٍ فحص الأوقات المتاحة...'
+                      : language === 'en'
+                        ? 'Booked slots are disabled for the selected date.'
+                        : 'الأوقات المحجوزة معطلة للتاريخ المحدد.'}
+                  </p>
                 </div>
               </div>
 
               <Button
                 onClick={() => setStep(2)}
-                disabled={!formData.date || !formData.time}
+                disabled={!formData.date || !formData.time || isSelectedSlotBooked}
                 className="w-full mt-8 bg-accent text-accent-foreground hover:bg-accent/90"
                 size="lg"
               >
@@ -208,13 +264,29 @@ const Appointment = () => {
                     value={formData.service}
                     onChange={handleChange}
                     className="form-input"
+                    disabled={isServicesLoading}
                     required
                   >
-                    <option value="">{language === 'en' ? 'Select a service...' : 'اختر الخدمة...'}</option>
-                    {categories.map((cat, i) => (
-                      <option key={i} value={cat}>{cat}</option>
+                    <option value="">
+                      {isServicesLoading
+                        ? language === 'en'
+                          ? 'Loading services...'
+                          : 'جارٍ تحميل الخدمات...'
+                        : language === 'en'
+                          ? 'Select a service...'
+                          : 'اختر الخدمة...'}
+                    </option>
+                    {serviceOptions.map((service) => (
+                      <option key={service.id} value={service.id}>
+                        {t(service.titleKey)}
+                      </option>
                     ))}
                   </select>
+                  {!isServicesLoading && !serviceOptions.length ? (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {language === 'en' ? 'No active services available right now.' : 'لا توجد خدمات نشطة متاحة حالياً.'}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div>
@@ -243,10 +315,17 @@ const Appointment = () => {
                 </Button>
                 <Button
                   type="submit"
+                  disabled={isSubmitting || createAppointmentMutation.isPending}
                   className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90"
                   size="lg"
                 >
-                  {language === 'en' ? 'Confirm Booking' : 'تأكيد الحجز'}
+                  {isSubmitting || createAppointmentMutation.isPending
+                    ? language === 'en'
+                      ? 'Booking...'
+                      : 'جارٍ الحجز...'
+                    : language === 'en'
+                      ? 'Confirm Booking'
+                      : 'تأكيد الحجز'}
                 </Button>
               </div>
             </form>
@@ -267,8 +346,8 @@ const Appointment = () => {
               </p>
               <p className="text-muted-foreground mb-8">
                 {language === 'en'
-                  ? 'We will send you a confirmation email shortly.'
-                  : 'سنرسل لك بريد تأكيد قريباً.'}
+                  ? 'We will contact with you shortly.'
+                  : 'سنقوم بالاتصال بك قريباً.'}
               </p>
               <Button
                 onClick={() => {

@@ -1,24 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { services } from '@/data/demoData';
-import { ArrowRight, Building2, Cpu, Edit, FileText, Home, Palette, Plane, Users } from 'lucide-react';
+import { services as demoServices } from '@/data/demoData';
+import { getServiceIconById } from '@/data/serviceIconMap';
+import { useFetchServices } from '@/services/useService';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-const iconMap: Record<string, React.ComponentType<any>> = {
-  FileText,
-  Edit,
-  Building2,
-  Cpu,
-  Palette,
-  Home,
-  Plane,
-  Users,
-};
 
 const Services = () => {
   const { t, language, isRTL } = useLanguage();
+  const { data } = useFetchServices({ isActive: true, limit: 1000 }, true);
+
+  const apiServices = data?.data ?? [];
+  const visibleServices = apiServices.length > 0 ? apiServices : demoServices;
 
   return (
     <Layout>
@@ -28,8 +22,8 @@ const Services = () => {
       <section className="section-padding bg-background">
         <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => {
-              const IconComponent = iconMap[service.icon];
+            {visibleServices.map((service, index) => {
+              const IconComponent = getServiceIconById(service.id);
               return (
                 <div
                   key={service.id}
@@ -41,24 +35,24 @@ const Services = () => {
                   </div>
 
                   <h3 className="font-display font-bold text-xl text-foreground mb-3 group-hover:text-accent transition-colors">
-                    {t(service.titleKey)}
+                    {'titleKey' in service ? t(service.titleKey) : language === 'en' ? service.title : service.titleAr}
                   </h3>
 
                   <p className="text-muted-foreground mb-6">
-                    {t(service.descKey)}
+                    {'descKey' in service ? t(service.descKey) : ''}
                   </p>
 
-                  {service.subServices.length > 0 && (
+                  {(service.subServices?.length ?? 0) > 0 && (
                     <ul className="space-y-2 mb-6">
-                      {service.subServices.slice(0, 4).map((sub) => (
+                      {service.subServices?.slice(0, 4).map((sub) => (
                         <li key={sub.id} className="flex items-center gap-2 text-sm text-foreground/80">
                           <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                           {language === 'en' ? sub.title : sub.titleAr}
                         </li>
                       ))}
-                      {service.subServices.length > 4 && (
+                      {(service.subServices?.length ?? 0) > 4 && (
                         <li className="text-sm text-muted-foreground">
-                          +{service.subServices.length - 4} {language === 'en' ? 'more' : 'المزيد'}
+                          +{(service.subServices?.length ?? 0) - 4} {language === 'en' ? 'more' : 'المزيد'}
                         </li>
                       )}
                     </ul>

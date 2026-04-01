@@ -1,22 +1,68 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import breadCrumbBG from '@/assets/3.webp';
 import SimpleParticles from '@/components/animations/SimpleParticles';
 import CTASection from '@/components/home/CTASection';
 import Layout from '@/components/layout/Layout';
+import ServiceDetailSkeleton from '@/components/skeleton/ServiceDetailSkeleton';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { services } from '@/data/demoData';
+import { services as demoServices } from '@/data/demoData';
+import { getServiceIconById } from '@/data/serviceIconMap';
+import { useFetchService, useFetchServices, type TServiceNode } from '@/services/useService';
 import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
+
+const findNodeById = (nodes: TServiceNode[] | undefined, id?: string): TServiceNode | null => {
+  if (!id || !nodes?.length) return null;
+
+  for (const node of nodes) {
+    if (node.id === id) return node;
+    const nested = findNodeById(node.children, id);
+    if (nested) return nested;
+  }
+
+  return null;
+};
+
+const buildServiceFallback = (serviceId?: string) => {
+  const direct = demoServices.find((item) => item.id === serviceId);
+  return direct ?? null;
+};
+
+type DemoService = (typeof demoServices)[number];
 
 const ServiceDetail = () => {
   const { serviceId, subId } = useParams();
   const { t, language, isRTL } = useLanguage();
 
-  const service = services.find(s => s.id === serviceId);
+  const serviceQuery = useFetchService(serviceId, Boolean(serviceId));
+  const servicesQuery = useFetchServices({ isActive: true, limit: 1000 }, true);
 
-  const subService = subId ? service?.subServices?.find(s => s.id === subId) : null;
-  const currentService = subService || service;
+  const serviceFromApi = serviceQuery.data?.data;
+  const serviceFromList = servicesQuery.data?.data?.find((item) => item.id === serviceId);
+  const fallbackService = buildServiceFallback(serviceId);
+  const service: DemoService | TServiceNode | { id: string; icon?: string; titleKey: string; descKey: string; requirements: string[]; process: string[]; subServices?: TServiceNode[]; isActive?: boolean } | null =
+    serviceFromApi || serviceFromList || fallbackService;
+
+  const subService = findNodeById(service?.subServices, subId) ?? null;
+  const heroTitle = subService
+    ? language === 'en'
+      ? subService.title
+      : subService.titleAr
+    : service && 'titleKey' in service
+      ? t(service.titleKey)
+      : '';
+
+  const heroDescription = service && 'descKey' in service ? t(service.descKey) : '';
+
+  const isLoading = serviceQuery.isLoading && !serviceFromApi && !serviceFromList && !fallbackService;
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <ServiceDetailSkeleton />
+      </Layout>
+    );
+  }
 
   if (!service) {
     return (
@@ -53,11 +99,19 @@ const ServiceDetail = () => {
             <ArrowLeft className={`w-4 h-4 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'}`} />
             {language === 'en' ? 'Back to Services' : 'العودة للخدمات'}
           </Link>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-primary-foreground dark:text-foreground mb-4">
-            {(currentService as any).titleKey ? t((currentService as any).titleKey) : t((currentService as any).title)}
-          </h1>
+          <div className="mb-4 flex items-center gap-3">
+            <div className="service-icon bg-white/10 text-white">
+              {(() => {
+                const IconComponent = getServiceIconById(service.id);
+                return <IconComponent className="h-5 w-5" />;
+              })()}
+            </div>
+            <h1 className="font-display text-4xl md:text-5xl font-bold text-primary-foreground dark:text-foreground">
+              {heroTitle}
+            </h1>
+          </div>
           <p className="text-lg text-primary-foreground/80 dark:text-muted-foreground max-w-2xl">
-            {subService ? t(service.descKey) : t((currentService as any).descKey)}
+            {heroDescription}
           </p>
         </div>
       </section>
@@ -80,7 +134,7 @@ const ServiceDetail = () => {
                 </p>
               </div>
 
-              {service.subServices.length > 0 && (
+              {service.subServices?.length > 0 && (
                 <>
                   <h3 className="font-display text-xl font-bold text-foreground mb-4">
                     {language === 'en' ? 'Available Services' : 'الخدمات المتاحة'}
@@ -96,15 +150,15 @@ const ServiceDetail = () => {
                           <h4 className="font-medium text-foreground">
                             {language === 'en' ? sub.title : sub.titleAr}
                           </h4>
-                          {'children' in sub && sub.children && (
+                          {sub.children?.length ? (
                             <ul className="mt-2 space-y-1">
-                              {(sub.children as any[]).map((child) => (
+                              {sub.children.map((child) => (
                                 <li key={child.id} className="text-sm text-muted-foreground">
                                   • {language === 'en' ? child.title : child.titleAr}
                                 </li>
                               ))}
                             </ul>
-                          )}
+                          ) : null}
                         </div>
                       </div>
                     ))}
@@ -143,7 +197,7 @@ const ServiceDetail = () => {
             {language === 'en' ? 'Requirements' : 'المتطلبات'}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {(currentService as any).requirements?.map((req, index) => (
+            {(subService?.requirements || (service && 'requirements' in service ? service.requirements : []) || []).map((req, index) => (
               <div key={index} className="flex items-start gap-3 p-4 bg-card border border-border rounded-xl">
                 <CheckCircle2 className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
                 <span className="text-foreground">{req}</span>
@@ -160,7 +214,7 @@ const ServiceDetail = () => {
             {language === 'en' ? 'Process' : 'العملية'}
           </h2>
           <div className="space-y-4">
-            {(currentService as any).process?.map((step, index) => (
+            {(subService?.process || (service && 'process' in service ? service.process : []) || []).map((step, index) => (
               <div key={index} className="flex items-start gap-4 p-4 bg-card border border-border rounded-xl">
                 <div className="flex-shrink-0 w-8 h-8 bg-accent text-accent-foreground rounded-full flex items-center justify-center font-bold">
                   {index + 1}

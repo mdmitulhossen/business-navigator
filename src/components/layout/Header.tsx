@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,9 +11,16 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
+import { useFetchServices, type TServiceNode } from '@/services/useService';
 import { ChevronDown, Globe, LogIn, MapPin, Menu, Moon, Phone, Sun, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
+interface ServiceMenuItem {
+  label: string;
+  path: string;
+  children?: ServiceMenuItem[];
+}
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,21 +49,21 @@ const Header = () => {
     { path: '/contact', label: t('nav.contact') },
   ];
 
-  const serviceSubItems = [
+  const staticServiceSubItems: ServiceMenuItem[] = [
     {
       label: language === 'en' ? 'Business License' : 'تراخيص الأعمال',
       path: '/services/business-license',
       children: [
-        { label: 'MISA', path: '/services/business-license/misa' },
-        { label: 'MCI', path: '/services/business-license/mci' },
+        { label: 'MISA', path: '/services/business-license' },
+        { label: 'MCI', path: '/services/business-license' },
       ],
     },
     {
       label: language === 'en' ? 'Amendment Service' : 'خدمات التعديل',
       path: '/services/amendment',
       children: [
-        { label: language === 'en' ? 'Activities' : 'الأنشطة', path: '/services/amendment/activities' },
-        { label: language === 'en' ? 'Position' : 'المناصب', path: '/services/amendment/position' },
+        { label: language === 'en' ? 'Activities' : 'الأنشطة', path: '/services/amendment' },
+        { label: language === 'en' ? 'Position' : 'المناصب', path: '/services/amendment' },
       ],
     },
     {
@@ -66,20 +72,20 @@ const Header = () => {
       children: [
         {
           label: language === 'en' ? 'Immigration & Visa' : 'الهجرة والتأشيرات',
-          path: '/services/gov-service/immigration',
+          path: '/services/gov-service',
           children: [
-            { label: language === 'en' ? 'Golden Visa' : 'التأشيرة الذهبية', path: '/services/gov-service/immigration/golden' },
-            { label: language === 'en' ? 'Residence Visa' : 'تأشيرة الإقامة', path: '/services/gov-service/immigration/residence' },
-            { label: language === 'en' ? 'Working Visa' : 'تأشيرة العمل', path: '/services/gov-service/immigration/working' },
+            { label: language === 'en' ? 'Golden Visa' : 'التأشيرة الذهبية', path: '/services/gov-service' },
+            { label: language === 'en' ? 'Residence Visa' : 'تأشيرة الإقامة', path: '/services/gov-service' },
+            { label: language === 'en' ? 'Working Visa' : 'تأشيرة العمل', path: '/services/gov-service' },
           ],
         },
-        { label: language === 'en' ? 'VAT' : 'ضريبة القيمة المضافة', path: '/services/gov-service/vat' },
-        { label: language === 'en' ? 'Tax & Zakat' : 'الضرائب والزكاة', path: '/services/gov-service/tax' },
-        { label: language === 'en' ? 'Accounting Solution' : 'الحلول المحاسبية', path: '/services/gov-service/accounting' },
-        { label: language === 'en' ? 'Qiwa Service' : 'خدمة قوى', path: '/services/gov-service/qiwa' },
-        { label: language === 'en' ? 'Muqeem' : 'مقيم', path: '/services/gov-service/muqeem' },
-        { label: language === 'en' ? 'National Address' : 'العنوان الوطني', path: '/services/gov-service/national-address' },
-        { label: language === 'en' ? 'GOSI Service' : 'التأمينات الاجتماعية', path: '/services/gov-service/gosi' },
+        { label: language === 'en' ? 'VAT' : 'ضريبة القيمة المضافة', path: '/services/gov-service' },
+        { label: language === 'en' ? 'Tax & Zakat' : 'الضرائب والزكاة', path: '/services/gov-service' },
+        { label: language === 'en' ? 'Accounting Solution' : 'الحلول المحاسبية', path: '/services/gov-service' },
+        { label: language === 'en' ? 'Qiwa Service' : 'خدمة قوى', path: '/services/gov-service' },
+        { label: language === 'en' ? 'Muqeem' : 'مقيم', path: '/services/gov-service' },
+        { label: language === 'en' ? 'National Address' : 'العنوان الوطني', path: '/services/gov-service' },
+        { label: language === 'en' ? 'GOSI Service' : 'التأمينات الاجتماعية', path: '/services/gov-service' },
       ],
     },
     { label: language === 'en' ? 'AI / IT Solution' : 'حلول الذكاء الاصطناعي', path: '/services/ai-it' },
@@ -88,6 +94,29 @@ const Header = () => {
     { label: language === 'en' ? 'Travel & Tourism' : 'السياحة والسفر', path: '/services/travel' },
     { label: language === 'en' ? 'Manpower' : 'القوى العاملة', path: '/services/manpower' },
   ];
+
+  const { data: servicesData, isLoading: isServicesLoading } = useFetchServices({ isActive: true, limit: 1000 }, true);
+
+  const mapNodeToMenuItem = (node: TServiceNode, topServiceId: string): ServiceMenuItem => ({
+    label: language === 'en' ? node.title : (node.titleAr || node.title),
+    path: `/services/${topServiceId}`,
+    children: node.children?.length ? node.children.map((child) => mapNodeToMenuItem(child, topServiceId)) : undefined,
+  });
+
+  const dynamicServiceSubItems: ServiceMenuItem[] =
+    servicesData?.data?.map((service) => ({
+      label: t(service.titleKey),
+      path: `/services/${service.id}`,
+      children: service.subServices?.length
+        ? service.subServices.map((node) => mapNodeToMenuItem(node, service.id))
+        : undefined,
+    })) ?? [];
+
+  const serviceSubItems: ServiceMenuItem[] = isServicesLoading
+    ? staticServiceSubItems
+    : dynamicServiceSubItems.length
+      ? dynamicServiceSubItems
+      : staticServiceSubItems;
 
   const licenseSubItems = [
     { label: language === 'en' ? 'Trade License' : 'رخصة تجارية', path: '/business-license/trade' },
@@ -176,12 +205,12 @@ const Header = () => {
                     <DropdownMenuSub key={item.path}>
                       <DropdownMenuSubTrigger>{item.label}</DropdownMenuSubTrigger>
                       <DropdownMenuSubContent>
-                        {item.children.map((child: any) => (
+                        {item.children.map((child) => (
                           child.children ? (
                             <DropdownMenuSub key={child.path}>
                               <DropdownMenuSubTrigger>{child.label}</DropdownMenuSubTrigger>
                               <DropdownMenuSubContent>
-                                {child.children.map((subChild: any) => (
+                                {child.children.map((subChild) => (
                                   <DropdownMenuItem key={subChild.path} asChild>
                                     <Link to={subChild.path} onClick={handleNavClick}>{subChild.label}</Link>
                                   </DropdownMenuItem>

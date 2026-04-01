@@ -1,0 +1,78 @@
+import {
+    BookOpenText,
+    Briefcase,
+    CalendarCheck2,
+    ContactRound,
+    FilePenLine,
+    LayoutDashboard,
+    Plane,
+    Users,
+} from 'lucide-react';
+import type { DashboardNavItem } from './dashboardTypes.ts';
+
+export const dashboardNavItems: DashboardNavItem[] = [
+  {
+    id: 'overview',
+    labelEn: 'Overview',
+    labelAr: 'نظرة عامة',
+    icon: LayoutDashboard,
+    descriptionEn: 'Manage dashboard overview',
+    descriptionAr: 'إدارة النظرة العامة',
+  },
+  {
+    id: 'services',
+    labelEn: 'Services',
+    labelAr: 'الخدمات',
+    icon: Briefcase,
+    descriptionEn: 'Manage service catalog',
+    descriptionAr: 'إدارة الخدمات',
+  },
+  {
+    id: 'team-members',
+    labelEn: 'Team Member',
+    labelAr: 'أعضاء الفريق',
+    icon: Users,
+    descriptionEn: 'Manage team members',
+    descriptionAr: 'إدارة أعضاء الفريق',
+  },
+  {
+    id: 'blog',
+    labelEn: 'Blog',
+    labelAr: 'المدونة',
+    icon: BookOpenText,
+    descriptionEn: 'Manage blog posts',
+    descriptionAr: 'إدارة منشورات المدونة',
+  },
+  {
+    id: 'contact',
+    labelEn: 'Contact',
+    labelAr: 'اتصل بنا',
+    icon: ContactRound,
+    descriptionEn: 'Manage contact messages',
+    descriptionAr: 'إدارة رسائل التواصل',
+  },
+  {
+    id: 'cms',
+    labelEn: 'CMS',
+    labelAr: 'إدارة المحتوى',
+    icon: FilePenLine,
+    descriptionEn: 'Manage website content',
+    descriptionAr: 'إدارة محتوى الموقع',
+  },
+  {
+    id: 'book-appointment',
+    labelEn: 'Book Appointment',
+    labelAr: 'حجز موعد',
+    icon: CalendarCheck2,
+    descriptionEn: 'Manage appointment bookings',
+    descriptionAr: 'إدارة حجوزات المواعيد',
+  },
+  {
+    id: 'book-flight',
+    labelEn: 'Book Flight',
+    labelAr: 'حجز رحلة',
+    icon: Plane,
+    descriptionEn: 'Manage flight bookings',
+    descriptionAr: 'إدارة حجوزات الرحلات',
+  },
+];

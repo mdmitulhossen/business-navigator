@@ -3,10 +3,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
+import { useLogin } from '@/services/authService';
 import { Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface LoginForm {
   email: string;
@@ -15,7 +16,8 @@ interface LoginForm {
 
 const Login = () => {
   const { theme } = useTheme();
-  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const loginMutation = useLogin();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -24,16 +26,15 @@ const Login = () => {
   } = useForm<LoginForm>();
 
   const onSubmit = async (data: LoginForm) => {
-    setIsLoading(true);
     try {
-      console.log('Login attempt:', data);
-      // Simulate API call - replace with actual auth logic
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Mock delay
-      // Handle success/error
-    } catch (error) {
-      console.error('Login failed:', error);
-    } finally {
-      setIsLoading(false);
+      const response = await loginMutation.mutateAsync(data);
+
+      if (!response?.success) return;
+
+      const role = response?.data?.user?.role?.toLowerCase?.() || '';
+      navigate(role === 'admin' ? '/dashboard' : '/', { replace: true });
+    } catch {
+      // handled inside useLogin
     }
   };
 
@@ -124,8 +125,8 @@ const Login = () => {
             </Link>
           </div> */}
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? (
+          <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
+            {loginMutation.isPending ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 Signing In...

@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useCreateFlightBooking, type FlightClass } from '@/services/useBookFlightService';
 import {
     ArrowRight,
     CheckCircle,
@@ -25,43 +26,93 @@ import { useState } from 'react';
 const FlightBooking = () => {
     const { language } = useLanguage();
     const [formData, setFormData] = useState({
-        fullName: '',
+        name: '',
         email: '',
-        phone: '',
-        from: '',
-        to: '',
+        phoneNumber: '',
+        flightFrom: '',
+        flightTo: '',
         departureDate: '',
         returnDate: '',
-        passengers: '1',
-        class: 'economy',
-        specialRequests: ''
+        numberOfPassengers: '1',
+        flightClass: 'ECONOMY' as FlightClass,
+        specialRequestNote: ''
     });
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const createFlightBookingMutation = useCreateFlightBooking();
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const minDate = tomorrow.toISOString().split('T')[0];
 
     const handleInputChange = (field: string, value: string) => {
         setFormData(prev => ({
             ...prev,
             [field]: value
         }));
+        if (isSubmitted) setIsSubmitted(false);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        
-        // Simulate API call
-        setTimeout(() => {
-            setIsSubmitting(false);
-            alert(language === 'en' ? 'Flight booking request submitted successfully!' : 'تم إرسال طلب حجز الطيران بنجاح!');
-        }, 2000);
+
+        await createFlightBookingMutation.mutateAsync({
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phoneNumber: formData.phoneNumber.trim(),
+            flightFrom: formData.flightFrom.trim().toUpperCase(),
+            flightTo: formData.flightTo.trim().toUpperCase(),
+            departureDate: new Date(`${formData.departureDate}T00:00:00.000Z`).toISOString(),
+            returnDate: new Date(`${formData.returnDate}T00:00:00.000Z`).toISOString(),
+            numberOfPassengers: Number(formData.numberOfPassengers),
+            flightClass: formData.flightClass,
+            specialRequestNote: formData.specialRequestNote.trim() || undefined,
+        });
+
+        setIsSubmitted(true);
+        setFormData({
+            name: '',
+            email: '',
+            phoneNumber: '',
+            flightFrom: '',
+            flightTo: '',
+            departureDate: '',
+            returnDate: '',
+            numberOfPassengers: '1',
+            flightClass: 'ECONOMY',
+            specialRequestNote: ''
+        });
     };
 
     const popularDestinations = [
-        { city: language === 'en' ? 'Dubai' : 'دبي', country: language === 'en' ? 'UAE' : 'الإمارات', price: '$299' },
-        { city: language === 'en' ? 'Cairo' : 'القاهرة', country: language === 'en' ? 'Egypt' : 'مصر', price: '$399' },
-        { city: language === 'en' ? 'Istanbul' : 'اسطنبول', country: language === 'en' ? 'Turkey' : 'تركيا', price: '$449' },
-        { city: language === 'en' ? 'London' : 'لندن', country: language === 'en' ? 'UK' : 'بريطانيا', price: '$799' }
+        {
+            city: language === 'en' ? 'Dubai' : 'دبي',
+            country: language === 'en' ? 'United Arab Emirates' : 'الإمارات العربية المتحدة',
+            airportCode: 'DXB',
+            region: language === 'en' ? 'Middle East' : 'الشرق الأوسط',
+            duration: language === 'en' ? 'Approx. 2h from Riyadh' : 'حوالي ساعتين من الرياض'
+        },
+        {
+            city: language === 'en' ? 'Cairo' : 'القاهرة',
+            country: language === 'en' ? 'Egypt' : 'مصر',
+            airportCode: 'CAI',
+            region: language === 'en' ? 'North Africa' : 'شمال أفريقيا',
+            duration: language === 'en' ? 'Approx. 2h 30m from Riyadh' : 'حوالي ساعتين و30 دقيقة من الرياض'
+        },
+        {
+            city: language === 'en' ? 'Istanbul' : 'اسطنبول',
+            country: language === 'en' ? 'Türkiye' : 'تركيا',
+            airportCode: 'IST',
+            region: language === 'en' ? 'Europe / Asia' : 'أوروبا / آسيا',
+            duration: language === 'en' ? 'Approx. 4h 30m from Riyadh' : 'حوالي 4 ساعات و30 دقيقة من الرياض'
+        },
+        {
+            city: language === 'en' ? 'London' : 'لندن',
+            country: language === 'en' ? 'United Kingdom' : 'المملكة المتحدة',
+            airportCode: 'LHR',
+            region: language === 'en' ? 'Europe' : 'أوروبا',
+            duration: language === 'en' ? 'Approx. 7h from Riyadh' : 'حوالي 7 ساعات من الرياض'
+        }
     ];
 
     const features = [
@@ -141,6 +192,14 @@ const FlightBooking = () => {
                             </CardHeader>
 
                             <CardContent className="p-6 md:p-8">
+                                {isSubmitted ? (
+                                    <div className="mb-6 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-700 dark:text-emerald-300">
+                                        {language === 'en'
+                                            ? 'Your flight booking request has been submitted successfully.'
+                                            : 'تم إرسال طلب حجز الطيران بنجاح.'}
+                                    </div>
+                                ) : null}
+
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     {/* Personal Information */}
                                     <div className="space-y-4">
@@ -151,15 +210,15 @@ const FlightBooking = () => {
                                         
                                         <div className="grid md:grid-cols-2 gap-4">
                                             <div className="space-y-2">
-                                                <Label htmlFor="fullName" className="text-slate-700 dark:text-slate-300">
+                                                <Label htmlFor="name" className="text-slate-700 dark:text-slate-300">
                                                     {language === 'en' ? 'Full Name' : 'الاسم الكامل'}
                                                 </Label>
                                                 <Input
-                                                    id="fullName"
+                                                    id="name"
                                                     type="text"
                                                     placeholder={language === 'en' ? 'Enter your full name' : 'أدخل اسمك الكامل'}
-                                                    value={formData.fullName}
-                                                    onChange={(e) => handleInputChange('fullName', e.target.value)}
+                                                    value={formData.name}
+                                                    onChange={(e) => handleInputChange('name', e.target.value)}
                                                     className="h-12"
                                                     required
                                                 />
@@ -188,8 +247,8 @@ const FlightBooking = () => {
                                                     id="phone"
                                                     type="tel"
                                                     placeholder={language === 'en' ? '+966 50 123 4567' : '+966 50 123 4567'}
-                                                    value={formData.phone}
-                                                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                                                    value={formData.phoneNumber}
+                                                    onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
                                                     className="h-12"
                                                     required
                                                 />
@@ -212,9 +271,9 @@ const FlightBooking = () => {
                                                 <Input
                                                     id="from"
                                                     type="text"
-                                                    placeholder={language === 'en' ? 'e.g., Riyadh, KSA' : 'مثال: الرياض، السعودية'}
-                                                    value={formData.from}
-                                                    onChange={(e) => handleInputChange('from', e.target.value)}
+                                                    placeholder={language === 'en' ? 'e.g., RUH' : 'مثال: RUH'}
+                                                    value={formData.flightFrom}
+                                                    onChange={(e) => handleInputChange('flightFrom', e.target.value)}
                                                     className="h-12"
                                                     required
                                                 />
@@ -227,9 +286,9 @@ const FlightBooking = () => {
                                                 <Input
                                                     id="to"
                                                     type="text"
-                                                    placeholder={language === 'en' ? 'e.g., Dubai, UAE' : 'مثال: دبي، الإمارات'}
-                                                    value={formData.to}
-                                                    onChange={(e) => handleInputChange('to', e.target.value)}
+                                                    placeholder={language === 'en' ? 'e.g., DXB' : 'مثال: DXB'}
+                                                    value={formData.flightTo}
+                                                    onChange={(e) => handleInputChange('flightTo', e.target.value)}
                                                     className="h-12"
                                                     required
                                                 />
@@ -242,6 +301,7 @@ const FlightBooking = () => {
                                                 <Input
                                                     id="departureDate"
                                                     type="date"
+                                                    min={minDate}
                                                     value={formData.departureDate}
                                                     onChange={(e) => handleInputChange('departureDate', e.target.value)}
                                                     className="h-12"
@@ -251,14 +311,16 @@ const FlightBooking = () => {
 
                                             <div className="space-y-2">
                                                 <Label htmlFor="returnDate" className="text-slate-700 dark:text-slate-300">
-                                                    {language === 'en' ? 'Return Date (Optional)' : 'تاريخ العودة (اختياري)'}
+                                                    {language === 'en' ? 'Return Date' : 'تاريخ العودة'}
                                                 </Label>
                                                 <Input
                                                     id="returnDate"
                                                     type="date"
+                                                    min={formData.departureDate || minDate}
                                                     value={formData.returnDate}
                                                     onChange={(e) => handleInputChange('returnDate', e.target.value)}
                                                     className="h-12"
+                                                    required
                                                 />
                                             </div>
 
@@ -266,7 +328,7 @@ const FlightBooking = () => {
                                                 <Label className="text-slate-700 dark:text-slate-300">
                                                     {language === 'en' ? 'Number of Passengers' : 'عدد المسافرين'}
                                                 </Label>
-                                                <Select value={formData.passengers} onValueChange={(value) => handleInputChange('passengers', value)}>
+                                                <Select value={formData.numberOfPassengers} onValueChange={(value) => handleInputChange('numberOfPassengers', value)}>
                                                     <SelectTrigger className="h-12">
                                                         <SelectValue />
                                                     </SelectTrigger>
@@ -275,7 +337,8 @@ const FlightBooking = () => {
                                                         <SelectItem value="2">2 {language === 'en' ? 'Passengers' : 'مسافرين'}</SelectItem>
                                                         <SelectItem value="3">3 {language === 'en' ? 'Passengers' : 'مسافرين'}</SelectItem>
                                                         <SelectItem value="4">4 {language === 'en' ? 'Passengers' : 'مسافرين'}</SelectItem>
-                                                        <SelectItem value="5+">5+ {language === 'en' ? 'Passengers' : 'مسافرين'}</SelectItem>
+                                                        <SelectItem value="5">5 {language === 'en' ? 'Passengers' : 'مسافرين'}</SelectItem>
+                                                        <SelectItem value="6">6 {language === 'en' ? 'Passengers' : 'مسافرين'}</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                             </div>
@@ -284,14 +347,15 @@ const FlightBooking = () => {
                                                 <Label className="text-slate-700 dark:text-slate-300">
                                                     {language === 'en' ? 'Flight Class' : 'درجة الطيران'}
                                                 </Label>
-                                                <Select value={formData.class} onValueChange={(value) => handleInputChange('class', value)}>
+                                                <Select value={formData.flightClass} onValueChange={(value: FlightClass) => handleInputChange('flightClass', value)}>
                                                     <SelectTrigger className="h-12">
                                                         <SelectValue />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="economy">{language === 'en' ? 'Economy Class' : 'الدرجة السياحية'}</SelectItem>
-                                                        <SelectItem value="business">{language === 'en' ? 'Business Class' : 'درجة رجال الأعمال'}</SelectItem>
-                                                        <SelectItem value="first">{language === 'en' ? 'First Class' : 'الدرجة الأولى'}</SelectItem>
+                                                        <SelectItem value="ECONOMY">{language === 'en' ? 'Economy Class' : 'الدرجة السياحية'}</SelectItem>
+                                                        <SelectItem value="PREMIUM_ECONOMY">{language === 'en' ? 'Premium Economy' : 'اقتصادية مميزة'}</SelectItem>
+                                                        <SelectItem value="BUSINESS">{language === 'en' ? 'Business Class' : 'درجة رجال الأعمال'}</SelectItem>
+                                                        <SelectItem value="FIRST">{language === 'en' ? 'First Class' : 'الدرجة الأولى'}</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                             </div>
@@ -300,14 +364,14 @@ const FlightBooking = () => {
 
                                     {/* Special Requests */}
                                     <div className="space-y-2">
-                                        <Label htmlFor="specialRequests" className="text-slate-700 dark:text-slate-300">
+                                        <Label htmlFor="specialRequestNote" className="text-slate-700 dark:text-slate-300">
                                             {language === 'en' ? 'Special Requests (Optional)' : 'طلبات خاصة (اختياري)'}
                                         </Label>
                                         <Textarea
-                                            id="specialRequests"
+                                            id="specialRequestNote"
                                             placeholder={language === 'en' ? 'Any special requirements, meal preferences, etc.' : 'أي متطلبات خاصة، تفضيلات الطعام، إلخ.'}
-                                            value={formData.specialRequests}
-                                            onChange={(e) => handleInputChange('specialRequests', e.target.value)}
+                                            value={formData.specialRequestNote}
+                                            onChange={(e) => handleInputChange('specialRequestNote', e.target.value)}
                                             className="min-h-[100px]"
                                         />
                                     </div>
@@ -315,10 +379,10 @@ const FlightBooking = () => {
                                     {/* Submit Button */}
                                     <Button
                                         type="submit"
-                                        disabled={isSubmitting}
+                                        disabled={createFlightBookingMutation.isPending}
                                         className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white shadow-lg hover:shadow-xl transition-all duration-300"
                                     >
-                                        {isSubmitting ? (
+                                        {createFlightBookingMutation.isPending ? (
                                             <div className="flex items-center gap-2">
                                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                                 {language === 'en' ? 'Submitting...' : 'جاري الإرسال...'}
@@ -354,11 +418,12 @@ const FlightBooking = () => {
                                                 <p className="font-semibold text-slate-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary transition-colors">
                                                     {dest.city}
                                                 </p>
-                                                <p className="text-sm text-slate-600 dark:text-slate-400">{dest.country}</p>
+                                                <p className="text-sm text-slate-600 dark:text-slate-400">{dest.country} • {dest.airportCode}</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400">{dest.region}</p>
                                             </div>
                                             <div className="text-right">
-                                                <p className="font-bold text-accent dark:text-accent">{dest.price}</p>
-                                                <p className="text-xs text-slate-500">{language === 'en' ? 'from' : 'من'}</p>
+                                                <p className="font-bold text-accent dark:text-accent">{dest.airportCode}</p>
+                                                <p className="text-xs text-slate-500">{dest.duration}</p>
                                             </div>
                                         </div>
                                     ))}

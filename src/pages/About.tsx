@@ -1,11 +1,18 @@
 import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
+import AboutTeamSectionSkeleton from '@/components/skeleton/AboutTeamSectionSkeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { teamMembers } from '@/data/demoData';
+import { useFetchTeamMembers } from '@/services/useTeamService';
 import { Award, Lightbulb, Target } from 'lucide-react';
 
 const About = () => {
   const { t, language } = useLanguage();
+  const { data: teamMembersData, isLoading: isTeamMembersLoading } = useFetchTeamMembers(
+    { isActive: true, limit: 1000 },
+    true,
+  );
+
+  const teamMembers = teamMembersData?.data ?? [];
 
   const values = [
     {
@@ -67,30 +74,34 @@ const About = () => {
             <div className="w-16 h-1 bg-accent mx-auto rounded-full" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
-              <div
-                key={member.id}
-                className="group animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="relative overflow-hidden rounded-2xl mb-4">
-                  <img
-                    src={member.image}
-                    alt={language === 'en' ? member.nameEn : member.nameAr}
-                    className="w-full aspect-[3/4] object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          {isTeamMembersLoading ? (
+            <AboutTeamSectionSkeleton />
+          ) : teamMembers.length ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {teamMembers.map((member, index) => (
+                <div
+                  key={member.id}
+                  className="group animate-fade-in-up"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="relative overflow-hidden rounded-2xl mb-4">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full aspect-[3/4] object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <h3 className="font-display font-semibold text-lg text-foreground">{member.name}</h3>
+                  <p className="text-sm text-accent">{member.designation}</p>
                 </div>
-                <h3 className="font-display font-semibold text-lg text-foreground">
-                  {language === 'en' ? member.nameEn : member.nameAr}
-                </h3>
-                <p className="text-sm text-accent">
-                  {language === 'en' ? member.roleEn : member.roleAr}
-                </p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-muted-foreground">
+              {language === 'en' ? 'No active team members found.' : 'لا يوجد أعضاء فريق نشطون حالياً.'}
+            </p>
+          )}
         </div>
       </section>
     </Layout>

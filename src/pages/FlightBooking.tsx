@@ -1,6 +1,17 @@
 import Layout from '@/components/layout/Layout';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -39,6 +50,7 @@ const FlightBooking = () => {
     });
 
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const createFlightBookingMutation = useCreateFlightBooking();
 
     const tomorrow = new Date();
@@ -53,8 +65,8 @@ const FlightBooking = () => {
         if (isSubmitted) setIsSubmitted(false);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const submitBookingRequest = async () => {
+        if (createFlightBookingMutation.isPending) return;
 
         await createFlightBookingMutation.mutateAsync({
             name: formData.name.trim(),
@@ -69,6 +81,7 @@ const FlightBooking = () => {
             specialRequestNote: formData.specialRequestNote.trim() || undefined,
         });
 
+        setIsConfirmOpen(false);
         setIsSubmitted(true);
         setFormData({
             name: '',
@@ -82,6 +95,12 @@ const FlightBooking = () => {
             flightClass: 'ECONOMY',
             specialRequestNote: ''
         });
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (createFlightBookingMutation.isPending) return;
+        setIsConfirmOpen(true);
     };
 
     const popularDestinations = [
@@ -135,6 +154,65 @@ const FlightBooking = () => {
 
     return (
         <Layout>
+            <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {language === 'en' ? 'Confirm Booking Request' : 'تأكيد طلب الحجز'}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {language === 'en'
+                                ? 'Are you sure booking this request?'
+                                : 'هل أنت متأكد من إرسال طلب الحجز هذا؟'}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel disabled={createFlightBookingMutation.isPending}>
+                            {language === 'en' ? 'Cancel' : 'إلغاء'}
+                        </AlertDialogCancel>
+                        <AlertDialogAction asChild>
+                            <Button
+                                type="button"
+                                onClick={submitBookingRequest}
+                                disabled={createFlightBookingMutation.isPending}
+                            >
+                                {createFlightBookingMutation.isPending
+                                    ? (language === 'en' ? 'Submitting...' : 'جاري الإرسال...')
+                                    : (language === 'en' ? 'Yes, Submit' : 'نعم، إرسال')}
+                            </Button>
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            <Dialog open={isSubmitted} onOpenChange={setIsSubmitted}>
+                <DialogContent className="max-w-xl overflow-hidden border-0 p-0">
+                    <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 px-8 py-10 text-center text-white">
+                        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white/20">
+                            <CheckCircle className="h-12 w-12" />
+                        </div>
+                        <DialogTitle className="text-2xl font-bold">
+                            {language === 'en' ? 'Booking Request Sent!' : 'تم إرسال طلب الحجز!'}
+                        </DialogTitle>
+                    </div>
+
+                    <div className="px-8 pb-8 pt-6 text-center">
+                        <DialogDescription className="text-base leading-7 text-slate-700 dark:text-slate-300">
+                            {language === 'en'
+                                ? 'We will contact you shortly.'
+                                : 'We will contact you shortly.'}
+                        </DialogDescription>
+                        <Button
+                            type="button"
+                            onClick={() => setIsSubmitted(false)}
+                            className="mt-6 h-11 min-w-36"
+                        >
+                            {language === 'en' ? 'Got it' : 'Got it'}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
             <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-accent/5 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
             {/* Hero Section */}
             <div className="relative overflow-hidden bg-gradient-to-r from-primary via-primary/90 to-primary/80 text-white">
@@ -192,14 +270,6 @@ const FlightBooking = () => {
                             </CardHeader>
 
                             <CardContent className="p-6 md:p-8">
-                                {isSubmitted ? (
-                                    <div className="mb-6 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-700 dark:text-emerald-300">
-                                        {language === 'en'
-                                            ? 'Your flight booking request has been submitted successfully.'
-                                            : 'تم إرسال طلب حجز الطيران بنجاح.'}
-                                    </div>
-                                ) : null}
-
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     {/* Personal Information */}
                                     <div className="space-y-4">

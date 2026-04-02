@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useCreateFlightBooking, type FlightClass } from '@/services/useBookFlightService';
+import { useFetchCMS } from '@/services/useCMSService';
 import {
     ArrowRight,
     CheckCircle,
@@ -36,6 +37,7 @@ import { useState } from 'react';
 
 const FlightBooking = () => {
     const { language } = useLanguage();
+    const { data: cmsData } = useFetchCMS(true);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -151,6 +153,15 @@ const FlightBooking = () => {
             description: language === 'en' ? 'Get your tickets confirmed instantly' : 'احصل على تأكيد تذاكرك فورياً'
         }
     ];
+
+    const cmsContact = cmsData?.data?.contact;
+    const contactName =
+        cmsContact?.name?.trim() ||
+        cmsContact?.companyName?.trim() ||
+        cmsContact?.company?.trim() ||
+        (language === 'en' ? 'Business Navigator' : 'بزنس نافيجيتر');
+    const contactPhone = cmsContact?.phone?.trim() || '+966 11 123 4567';
+    const contactEmail = cmsContact?.email?.trim() || 'flights@business-navigator.com';
 
     return (
         <Layout>
@@ -514,14 +525,14 @@ const FlightBooking = () => {
                                     <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-700">
                                         <Phone className="w-5 h-5 text-primary" />
                                         <div>
-                                            <p className="font-semibold text-slate-900 dark:text-white">+966 11 123 4567</p>
+                                            <p className="font-semibold text-slate-900 dark:text-white" dir="ltr">{contactPhone}</p>
                                             <p className="text-sm text-slate-600 dark:text-slate-400">{language === 'en' ? '24/7 Support' : 'دعم على مدار الساعة'}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-700">
                                         <Mail className="w-5 h-5 text-primary" />
                                         <div>
-                                            <p className="font-semibold text-slate-900 dark:text-white">flights@business-navigator.com</p>
+                                            <p className="font-semibold text-slate-900 dark:text-white" dir="ltr">{contactEmail}</p>
                                             <p className="text-sm text-slate-600 dark:text-slate-400">{language === 'en' ? 'Email Support' : 'دعم البريد الإلكتروني'}</p>
                                         </div>
                                     </div>

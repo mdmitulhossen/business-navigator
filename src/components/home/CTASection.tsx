@@ -1,11 +1,15 @@
 import SimpleParticles from '@/components/animations/SimpleParticles';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useFetchCMS } from '@/services/useCMSService';
 import { ArrowRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const CTASection = () => {
   const { language, isRTL } = useLanguage();
+  const { data: cmsData } = useFetchCMS(true);
+
+  const contactPhone = cmsData?.data?.contact?.phone?.trim() || '+966 11 234 5678';
 
   return (
     <section className="py-20 bg-gradient-hero relative overflow-hidden">
@@ -44,9 +48,9 @@ const CTASection = () => {
               size="lg"
               className="border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 dark:border-foreground/30 dark:text-foreground dark:hover:bg-foreground/10 px-8 py-6 text-base font-semibold rounded-lg bg-transparent"
             >
-              <a href="tel:+966112345678">
+              <a href={`tel:${contactPhone.replace(/\s+/g, '')}`}>
                 <Phone className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                +966 11 234 5678
+                {contactPhone}
               </a>
             </Button>
           </div>

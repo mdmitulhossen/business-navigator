@@ -12,15 +12,25 @@ import TeamMembersDashboardPage from '@/components/dashboard/pages/TeamMembersDa
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { StorageKeys } from '@/types/generalTypes';
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { language } = useLanguage();
   const isArabic = language === 'ar';
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('overview');
+  const getSectionFromSearch = (search: string) => {
+    const section = new URLSearchParams(search).get('section');
+    return dashboardNavItems.some((item) => item.id === section) ? section : 'overview';
+  };
+
+  const [activeSection, setActiveSection] = useState(() => getSectionFromSearch(location.search));
+
+  useEffect(() => {
+    setActiveSection(getSectionFromSearch(location.search));
+  }, [location.search]);
 
   const activeMenu = useMemo(
     () => dashboardNavItems.find((item) => item.id === activeSection) ?? dashboardNavItems[0],
@@ -29,6 +39,7 @@ const Dashboard = () => {
 
   const handleNavigate = (sectionId: string) => {
     setActiveSection(sectionId);
+    navigate({ search: `?section=${sectionId}` });
     setMobileSidebarOpen(false);
   };
 

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useCreateOrUpdateCMS, useFetchCMS, type TCMSContact } from '@/services/useCMSService';
+import { useCreateOrUpdateCMS, useFetchCMS, type SocialMediaKey, type TCMSContact } from '@/services/useCMSService';
 import { FileText, Loader2, Plus, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
@@ -13,8 +13,6 @@ import 'suneditor/dist/css/suneditor.min.css';
 interface CmsDashboardPageProps {
   language: 'en' | 'ar';
 }
-
-type SocialMediaKey = 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube' | 'tiktok' | 'whatsapp';
 
 const SOCIAL_MEDIA_OPTIONS: { key: SocialMediaKey; labelEn: string; labelAr: string }[] = [
   { key: 'facebook', labelEn: 'Facebook', labelAr: 'فيسبوك' },

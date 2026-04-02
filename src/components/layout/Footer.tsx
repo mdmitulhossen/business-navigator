@@ -1,10 +1,42 @@
 import SimpleParticles from '@/components/animations/SimpleParticles';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from 'lucide-react';
+import { useFetchCMS, type SocialMediaKey } from '@/services/useCMSService';
+import { Facebook, Instagram, Linkedin, Mail, MapPin, MessageCircle, Phone, Twitter, Youtube } from 'lucide-react';
+import type { ComponentType } from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const { t, language } = useLanguage();
+  const { data: cmsData } = useFetchCMS(true);
+
+  const cmsContact = cmsData?.data?.contact;
+
+  const normalizeUrl = (url?: string) => {
+    const trimmed = url?.trim();
+    if (!trimmed) return '';
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed;
+    return `https://${trimmed}`;
+  };
+
+  const socialIconMap: Record<SocialMediaKey, ComponentType<{ className?: string }>> = {
+    facebook: Facebook,
+    twitter: Twitter,
+    instagram: Instagram,
+    linkedin: Linkedin,
+    youtube: Youtube,
+    tiktok: MessageCircle,
+    whatsapp: MessageCircle,
+  };
+
+  const socialOrder: SocialMediaKey[] = ['facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'tiktok', 'whatsapp'];
+
+  const socialLinks = socialOrder
+    .map((key) => ({
+      key,
+      href: normalizeUrl(cmsContact?.[key]),
+      Icon: socialIconMap[key],
+    }))
+    .filter((item) => item.href);
 
   const quickLinks = [
     { label: t('nav.about'), path: '/about' },
@@ -17,7 +49,7 @@ const Footer = () => {
     <footer className="bg-primary text-primary-foreground dark:bg-background dark:text-white relative overflow-hidden">
       <SimpleParticles count={55} />
       <div className="container-custom py-12 md:py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-3 mb-4 group">
@@ -41,26 +73,22 @@ const Footer = () => {
             <p className="text-sm text-primary-foreground/80 dark:text-white/70 mb-6 leading-relaxed">
               {t('footer.description')}
             </p>
-            <div className="flex items-center gap-4">
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 dark:bg-white/10 dark:hover:bg-accent/20 transition-all duration-200 hover:scale-105"
-              >
-                <Twitter className="w-5 h-5 text-primary-foreground/70 dark:text-white/70 dark:hover:text-accent" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 dark:bg-white/10 dark:hover:bg-accent/20 transition-all duration-200 hover:scale-105"
-              >
-                <Linkedin className="w-5 h-5 text-primary-foreground/70 dark:text-white/70 dark:hover:text-accent" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 dark:bg-white/10 dark:hover:bg-accent/20 transition-all duration-200 hover:scale-105"
-              >
-                <Instagram className="w-5 h-5 text-primary-foreground/70 dark:text-white/70 dark:hover:text-accent" />
-              </a>
-            </div>
+            {socialLinks.length > 0 && (
+              <div className="flex items-center gap-4">
+                {socialLinks.map(({ key, href, Icon }) => (
+                  <a
+                    key={key}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={key}
+                    className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 dark:bg-white/10 dark:hover:bg-accent/20 transition-all duration-200 hover:scale-105"
+                  >
+                    <Icon className="w-5 h-5 text-primary-foreground/70 dark:text-white/70 dark:hover:text-accent" />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}
@@ -83,7 +111,7 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="lg:col-span-2">
+          <div className="">
             <h3 className="font-display font-semibold text-lg mb-4 text-accent dark:text-accent dark:font-bold">
               {t('footer.contactInfo')}
             </h3>
@@ -91,21 +119,21 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-0.5 text-accent flex-shrink-0" />
                 <span className="text-sm text-primary-foreground/80 dark:text-white/70 leading-relaxed">
-                  {language === 'en'
+                  {cmsContact?.address || (language === 'en'
                     ? 'Kingdom of Saudi Arabia, Riyadh, Olaya District, King Fahd Road'
-                    : 'المملكة العربية السعودية، الرياض، حي العليا، طريق الملك فهد'}
+                    : 'المملكة العربية السعودية، الرياض، حي العليا، طريق الملك فهد')}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-accent flex-shrink-0" />
                 <span className="text-sm text-primary-foreground/80 dark:text-white/70" dir="ltr">
-                  +966 11 234 5678
+                  {cmsContact?.phone || '+966 11 234 5678'}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-accent flex-shrink-0" />
                 <span className="text-sm text-primary-foreground/80 dark:text-white/70">
-                  info@consultant.sa
+                  {cmsContact?.email || 'info@consultant.sa'}
                 </span>
               </li>
             </ul>

@@ -1,6 +1,7 @@
 import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { serviceCategories, serviceCategoriesAr } from '@/data/demoData';
 import { useFetchCMS } from '@/services/useCMSService';
@@ -10,7 +11,7 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
-import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { CheckCircle2, Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
@@ -40,6 +41,7 @@ const Contact = () => {
     service: '',
     message: '',
   });
+  const [successOpen, setSuccessOpen] = useState(false);
   const [mapCenter, setMapCenter] = useState<LatLng>(DEFAULT_CENTER);
 
   const cmsContact = cmsData?.data?.contact;
@@ -110,6 +112,7 @@ const Contact = () => {
         service: '',
         message: '',
       });
+      setSuccessOpen(true);
     } catch {
       // toast already handled in service hook
     }
@@ -302,6 +305,22 @@ const Contact = () => {
           </div>
         </div>
       </section>
+
+      <Dialog open={successOpen} onOpenChange={setSuccessOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+              <CheckCircle2 className="h-8 w-8" />
+            </div>
+            <DialogTitle className="text-center">
+              {language === 'en' ? 'Request Submitted' : 'تم إرسال الطلب'}
+            </DialogTitle>
+            <DialogDescription className="text-center text-base">
+              {language === 'en' ? 'We will contact you shortly.' : 'سنتواصل معك قريبًا.'}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };

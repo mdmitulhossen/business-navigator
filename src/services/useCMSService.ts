@@ -7,6 +7,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const CMS_ENDPOINT = '/cms';
 
+export type SocialMediaKey = 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube' | 'tiktok' | 'whatsapp';
+
 export type TCMSContact = {
 	phone: string;
 	email: string;

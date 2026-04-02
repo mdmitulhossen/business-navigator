@@ -14,6 +14,7 @@ import 'leaflet/dist/leaflet.css';
 import { CheckCircle2, Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { useLocation } from 'react-router-dom';
 
 type LatLng = [number, number];
 
@@ -31,6 +32,7 @@ L.Marker.prototype.options.icon = L.icon({
 
 const Contact = () => {
   const { t, language } = useLanguage();
+  const { pathname } = useLocation();
   const { data: cmsData } = useFetchCMS(true);
   const createContactMutation = useCreateContact();
   const [formData, setFormData] = useState({

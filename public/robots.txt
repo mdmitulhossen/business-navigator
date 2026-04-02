@@ -1,14 +1,47 @@
-User-agent: Googlebot
-Allow: /
+# Business Navigator - Robots.txt
+# SEO optimized crawling rules
 
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
+# Default rules for all bots
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /dashboard/login
+Disallow: /login
+Disallow: /admin
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
+Crawl-delay: 1
+
+# Google Bot
+User-agent: Googlebot
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /login
+Crawl-delay: 0
+
+# Bing Bot
+User-agent: Bingbot
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /login
+Crawl-delay: 1
+
+# SEO Tools
+User-agent: Slurp
+Allow: /
+Disallow: /dashboard
+
+User-agent: DuckDuckGo
+Allow: /
+Disallow: /dashboard
+
+# Disable bad bots
+User-agent: AhrefsBot
+User-agent: SemrushBot
+Disallow: /
+
+# Sitemaps
+Sitemap: https://www.soudasa.com/sitemap.xml

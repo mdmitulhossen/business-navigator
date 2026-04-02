@@ -1,14 +1,16 @@
 import PageHero from '@/components/common/PageHero';
+import SEOHead from '@/components/common/SEOHead';
 import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { services as demoServices } from '@/data/demoData';
 import { getServiceIconById } from '@/data/serviceIconMap';
 import { useFetchServices } from '@/services/useService';
 import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Services = () => {
   const { t, language, isRTL } = useLanguage();
+  const { pathname } = useLocation();
   const { data } = useFetchServices({ isActive: true, limit: 1000 }, true);
 
   const apiServices = data?.data ?? [];
@@ -16,6 +18,7 @@ const Services = () => {
 
   return (
     <Layout>
+      <SEOHead pathname={pathname} />
       <PageHero badge={t('services.label')} title={t('services.title')} />
 
       {/* Services Grid */}

@@ -1,11 +1,14 @@
 import PageHero from '@/components/common/PageHero';
+import SEOHead from '@/components/common/SEOHead';
 import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { DEFAULT_PRIVACY_HTML_AR, DEFAULT_PRIVACY_HTML_EN } from '@/data/defaultPolicyHtml';
 import { useFetchCMS } from '@/services/useCMSService';
+import { useLocation } from 'react-router-dom';
 
 const Privacy = () => {
   const { language } = useLanguage();
+  const { pathname } = useLocation();
   const isArabic = language === 'ar';
   const { data, isLoading } = useFetchCMS(true);
 
@@ -14,6 +17,7 @@ const Privacy = () => {
 
   return (
     <Layout>
+      <SEOHead pathname={pathname} />
       <PageHero
         badge={isArabic ? 'الخصوصية' : 'Privacy'}
         title={isArabic ? 'سياسة الخصوصية' : 'Privacy Policy'}

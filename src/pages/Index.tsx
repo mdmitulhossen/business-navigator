@@ -1,3 +1,4 @@
+import SEOHead from '@/components/common/SEOHead';
 import CTASection from '@/components/home/CTASection';
 import HeroSection2 from '@/components/home/HeroSection2';
 import ProcessSection from '@/components/home/ProcessSection';
@@ -6,10 +7,14 @@ import StatsSection from '@/components/home/StatsSection';
 import TrustPartners from '@/components/home/TrustPartners';
 import VisionOverview from '@/components/home/VisionOverview';
 import Layout from '@/components/layout/Layout';
+import { useLocation } from 'react-router-dom';
 
 const Index = () => {
+  const { pathname } = useLocation();
+
   return (
     <Layout>
+      <SEOHead pathname={pathname} />
       <HeroSection2 />
       <StatsSection />
       <ServicesSection />

@@ -1,12 +1,15 @@
 import PageHero from '@/components/common/PageHero';
+import SEOHead from '@/components/common/SEOHead';
 import Layout from '@/components/layout/Layout';
 import AboutTeamSectionSkeleton from '@/components/skeleton/AboutTeamSectionSkeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useFetchTeamMembers } from '@/services/useTeamService';
 import { Award, Lightbulb, Target } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 const About = () => {
   const { t, language } = useLanguage();
+  const { pathname } = useLocation();
   const { data: teamMembersData, isLoading: isTeamMembersLoading } = useFetchTeamMembers(
     { isActive: true, limit: 1000 },
     true,
@@ -34,6 +37,7 @@ const About = () => {
 
   return (
     <Layout>
+      <SEOHead pathname={pathname} />
       <PageHero badge={t('about.label')} title={t('about.title')} subtitle={t('about.subtitle')} />
 
       {/* Values Section */}

@@ -1,4 +1,5 @@
 import breadCrumbBG from '@/assets/3.webp';
+import SEOHead from '@/components/common/SEOHead';
 import DashboardPageLoader from '@/components/dashboard/DashboardPageLoader';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -13,11 +14,12 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useFetchBlog, useFetchBlogs, type TBlog } from '@/services/useBlogService';
 import { ArrowLeft, ArrowRight, Calendar, Eye, User } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 
 const Blog = () => {
   const { t, language, isRTL } = useLanguage();
   const { id } = useParams<{ id: string }>();
+  const { pathname } = useLocation();
   const isArabic = language === 'ar';
   const isDetailPage = Boolean(id);
 
@@ -51,6 +53,21 @@ const Blog = () => {
 
     return (
       <Layout>
+        <SEOHead
+          pathname={pathname}
+          articleData={
+            detailBlog
+              ? {
+                  title: detailBlog.title,
+                  description: stripHtml(detailBlog.description).substring(0, 160),
+                  image: detailBlog.image,
+                  author: detailBlog.bloggerName,
+                  datePublished: detailBlog.createdAt || new Date().toISOString(),
+                  dateModified: detailBlog.updatedAt,
+                }
+              : undefined
+          }
+        />
         <section
           className="relative overflow-hidden py-20"
           style={{
@@ -121,6 +138,7 @@ const Blog = () => {
 
   return (
     <Layout>
+      <SEOHead pathname={pathname} />
       {/* Hero */}
       <section
         className="relative overflow-hidden py-20"

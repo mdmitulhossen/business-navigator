@@ -29,7 +29,6 @@ import {
     Phone,
     Plane,
     Shield,
-    Star,
     User,
     Zap
 } from 'lucide-react';
@@ -574,7 +573,7 @@ const FlightBooking = () => {
                 </div>
 
                 {/* Customer Reviews Section */}
-                <div className="mt-16">
+                {/* <div className="mt-16">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
                             {language === 'en' ? 'What Our Customers Say' : 'ماذا يقول عملاؤنا'}
@@ -611,7 +610,7 @@ const FlightBooking = () => {
                             </Card>
                         ))}
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
         </Layout>

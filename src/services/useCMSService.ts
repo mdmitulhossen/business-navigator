@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { getAxios, postAxios } from '@/axios/generic-api-calls';
+import { deleteAxios, getAxios, patchAxios, postAxios } from '@/axios/generic-api-calls';
 import { toast } from '@/lib/toast';
 import { extractErrorMsg, formatResponse, logoutFunc } from '@/utils/commonUtils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -39,12 +39,17 @@ export type TCompanyGellert = {
 	images: string[];
 	videos: TCompanyGalleryVideo[];
 };
+ export type TTrustedPartner = {
+	id?: string;
+ 	imageUrl: string;
+ };
 
 export type TCMS = {
 	id: string;
 	contact: TCMSContact;
 	about_company: TAboutCompany;
 	companyGellert: TCompanyGellert;
+ 	trustedPartners: TTrustedPartner[];
 	privacyPolicy: string;
 	termsOfUse: string;
 	createdAt?: string;
@@ -58,6 +63,8 @@ export interface CMSResponse<T> {
 	message: string;
 	data: T;
 }
+
+export type TrustedPartnersListResponse = CMSResponse<TTrustedPartner[]>;
 
 /**
  * Fetch CMS data (GET /cms)
@@ -102,6 +109,118 @@ export function useCreateOrUpdateCMS() {
 				return;
 			}
 			toast.success(data.message || 'CMS data saved successfully');
+			queryClient.invalidateQueries({ queryKey: ['cms'] });
+		},
+		onError: (err: unknown) => {
+			const msg = extractErrorMsg(err);
+			if ((err as any)?.response?.status === 401) {
+				logoutFunc(msg);
+			}
+			toast.error(msg);
+			return Promise.reject(err);
+		},
+	});
+}
+
+export function useFetchTrustedPartners(enabled = true) {
+	return useQuery<TrustedPartnersListResponse, unknown>({
+		queryFn: async ({ signal }) => {
+			try {
+				const response = await getAxios<TrustedPartnersListResponse>(`${CMS_ENDPOINT}/trusted-partners`, undefined, signal);
+				return formatResponse(response);
+			} catch (error: unknown) {
+				const msg = extractErrorMsg(error);
+				if ((error as any)?.response?.status === 401) {
+					logoutFunc(msg);
+					return await Promise.reject(new Error(msg));
+				}
+				return await Promise.reject(new Error(msg));
+			}
+		},
+		queryKey: ['trusted-partners'],
+		enabled,
+	});
+}
+
+export function useCreateTrustedPartner() {
+	const queryClient = useQueryClient();
+
+	return useMutation<CMSResponse<{ partner: TTrustedPartner; trustedPartners: TTrustedPartner[] }>, unknown, { imageUrl: string }>({
+		mutationFn: async (payload) => {
+			const response = await postAxios<CMSResponse<{ partner: TTrustedPartner; trustedPartners: TTrustedPartner[] }>, { imageUrl: string }>(
+				`${CMS_ENDPOINT}/trusted-partners`,
+				payload,
+			);
+			return formatResponse(response);
+		},
+		onSuccess: (data) => {
+			if (!data.success) {
+				toast.error(data.message || 'Failed to create partner');
+				return;
+			}
+			toast.success(data.message || 'Trusted partner created successfully');
+			queryClient.invalidateQueries({ queryKey: ['trusted-partners'] });
+			queryClient.invalidateQueries({ queryKey: ['cms'] });
+		},
+		onError: (err: unknown) => {
+			const msg = extractErrorMsg(err);
+			if ((err as any)?.response?.status === 401) {
+				logoutFunc(msg);
+			}
+			toast.error(msg);
+			return Promise.reject(err);
+		},
+	});
+}
+
+export function useUpdateTrustedPartner() {
+	const queryClient = useQueryClient();
+
+	return useMutation<CMSResponse<{ trustedPartners: TTrustedPartner[] }>, unknown, { partnerId: string; imageUrl: string }>({
+		mutationFn: async ({ partnerId, imageUrl }) => {
+			const response = await patchAxios<CMSResponse<{ trustedPartners: TTrustedPartner[] }>, { imageUrl: string }>(
+				`${CMS_ENDPOINT}/trusted-partners/${partnerId}`,
+				{ imageUrl },
+			);
+			return formatResponse(response);
+		},
+		onSuccess: (data) => {
+			if (!data.success) {
+				toast.error(data.message || 'Failed to update partner');
+				return;
+			}
+			toast.success(data.message || 'Trusted partner updated successfully');
+			queryClient.invalidateQueries({ queryKey: ['trusted-partners'] });
+			queryClient.invalidateQueries({ queryKey: ['cms'] });
+		},
+		onError: (err: unknown) => {
+			const msg = extractErrorMsg(err);
+			if ((err as any)?.response?.status === 401) {
+				logoutFunc(msg);
+			}
+			toast.error(msg);
+			return Promise.reject(err);
+		},
+	});
+}
+
+export function useDeleteTrustedPartner() {
+	const queryClient = useQueryClient();
+
+	return useMutation<CMSResponse<{ trustedPartners: TTrustedPartner[] }>, unknown, { partnerId: string }>({
+		mutationFn: async ({ partnerId }) => {
+			const response = await deleteAxios<CMSResponse<{ trustedPartners: TTrustedPartner[] }>>(
+				`${CMS_ENDPOINT}/trusted-partners/${partnerId}`,
+			);
+			return formatResponse(response);
+		},
+		onSuccess: (data) => {
+			if (!data.success) {
+				toast.error(data.message || 'Failed to delete partner');
+				return;
+			}
+			toast.success(data.message || 'Trusted partner deleted successfully');
+			queryClient.invalidateQueries({ queryKey: ['trusted-partners'] });
 			queryClient.invalidateQueries({ queryKey: ['cms'] });
 		},
 		onError: (err: unknown) => {

@@ -6,10 +6,14 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   useCreateOrUpdateCMS,
+  useCreateTrustedPartner,
+  useDeleteTrustedPartner,
   useFetchCMS,
+  useUpdateTrustedPartner,
   type SocialMediaKey,
   type TCMSContact,
   type TCompanyGalleryVideo,
+  type TTrustedPartner,
 } from '@/services/useCMSService';
 import { FileText, Loader2, Plus, X, Youtube } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -46,8 +50,9 @@ type CMSFormValues = {
     images: string[];
     videos: TCompanyGalleryVideo[];
   };
-  privacyPolicy: string;
-  termsOfUse: string;
+   trustedPartners: TTrustedPartner[];
+   privacyPolicy: string;
+   termsOfUse: string;
 };
 
 // Privacy Policy Editor Component
@@ -132,9 +137,15 @@ const CmsDashboardPage = ({ language }: CmsDashboardPageProps) => {
   const [galleryVideos, setGalleryVideos] = useState<TCompanyGalleryVideo[]>([]);
   const [newVideoType, setNewVideoType] = useState<'embed' | 'link'>('embed');
   const [newVideoValue, setNewVideoValue] = useState('');
+  const [trustedPartners, setTrustedPartners] = useState<TTrustedPartner[]>([]);
+  const [newPartnerImageUrl, setNewPartnerImageUrl] = useState('');
+  const [partnerDrafts, setPartnerDrafts] = useState<Record<string, string>>({});
 
   const { data, isLoading } = useFetchCMS(true);
   const updateCMSMutation = useCreateOrUpdateCMS();
+  const createTrustedPartnerMutation = useCreateTrustedPartner();
+  const updateTrustedPartnerMutation = useUpdateTrustedPartner();
+  const deleteTrustedPartnerMutation = useDeleteTrustedPartner();
 
   const form = useForm<CMSFormValues>({
     defaultValues: {
@@ -152,6 +163,7 @@ const CmsDashboardPage = ({ language }: CmsDashboardPageProps) => {
         images: [],
         videos: [],
       },
+      trustedPartners: [],
       privacyPolicy: '',
       termsOfUse: '',
     },
@@ -177,6 +189,20 @@ const CmsDashboardPage = ({ language }: CmsDashboardPageProps) => {
         )
         : [];
 
+      const cmsPartners = Array.isArray(data.data.trustedPartners)
+        ? data.data.trustedPartners.filter(
+            (item) => item && typeof item.imageUrl === 'string'
+          )
+        : [];
+
+      setTrustedPartners(cmsPartners);
+      setPartnerDrafts(
+        Object.fromEntries(
+          cmsPartners
+            .filter((item) => item.id)
+            .map((item) => [item.id as string, item.imageUrl])
+        )
+      );
       setGalleryImages(cmsImages);
       setGalleryVideos(cmsVideos);
 
@@ -197,6 +223,7 @@ const CmsDashboardPage = ({ language }: CmsDashboardPageProps) => {
           images: cmsImages,
           videos: cmsVideos,
         },
+        trustedPartners: cmsPartners,
         privacyPolicy: data.data.privacyPolicy || '',
         termsOfUse: data.data.termsOfUse || '',
       });
@@ -256,6 +283,53 @@ const CmsDashboardPage = ({ language }: CmsDashboardPageProps) => {
     setGalleryVideos((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleAddPartner = async () => {
+    const value = newPartnerImageUrl.trim();
+    if (!value) return;
+
+    const result = await createTrustedPartnerMutation.mutateAsync({ imageUrl: value });
+    setTrustedPartners(result.data.trustedPartners);
+    setPartnerDrafts(
+      Object.fromEntries(
+        result.data.trustedPartners
+          .filter((item) => item.id)
+          .map((item) => [item.id as string, item.imageUrl])
+      )
+    );
+    setNewPartnerImageUrl('');
+  };
+
+  const handlePartnerDraftChange = (partnerId: string, value: string) => {
+    setPartnerDrafts((prev) => ({ ...prev, [partnerId]: value }));
+  };
+
+  const handleUpdatePartner = async (partnerId: string) => {
+    const imageUrl = partnerDrafts[partnerId]?.trim();
+    if (!imageUrl) return;
+
+    const result = await updateTrustedPartnerMutation.mutateAsync({ partnerId, imageUrl });
+    setTrustedPartners(result.data.trustedPartners);
+    setPartnerDrafts(
+      Object.fromEntries(
+        result.data.trustedPartners
+          .filter((item) => item.id)
+          .map((item) => [item.id as string, item.imageUrl])
+      )
+    );
+  };
+
+  const handleRemovePartner = async (partnerId: string) => {
+    const result = await deleteTrustedPartnerMutation.mutateAsync({ partnerId });
+    setTrustedPartners(result.data.trustedPartners);
+    setPartnerDrafts(
+      Object.fromEntries(
+        result.data.trustedPartners
+          .filter((item) => item.id)
+          .map((item) => [item.id as string, item.imageUrl])
+      )
+    );
+  };
+
   const onSubmit: SubmitHandler<CMSFormValues> = async (values) => {
     const contact: TCMSContact & Record<string, string> = {
       phone: values.phone.trim(),
@@ -286,8 +360,9 @@ const CmsDashboardPage = ({ language }: CmsDashboardPageProps) => {
         images: galleryImages,
         videos: galleryVideos,
       },
-      privacyPolicy: values.privacyPolicy.trim(),
-      termsOfUse: values.termsOfUse.trim(),
+       trustedPartners,
+       privacyPolicy: values.privacyPolicy.trim(),
+       termsOfUse: values.termsOfUse.trim(),
     });
   };
 
@@ -515,6 +590,93 @@ const CmsDashboardPage = ({ language }: CmsDashboardPageProps) => {
                 <p className="text-sm text-muted-foreground">{isArabic ? 'لا توجد فيديوهات مضافة.' : 'No videos added yet.'}</p>
               )}
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Trusted Partners */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{isArabic ? 'الشركاء الموثوقون' : 'Trusted Partners'}</CardTitle>
+            <CardDescription>
+              {isArabic
+                ? 'أضف أو حدّث أو احذف شعارات الشركاء عبر رابط الصورة.'
+                : 'Create, update, or delete partner logos using image URLs.'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex gap-2">
+              <Input
+                value={newPartnerImageUrl}
+                onChange={(e) => setNewPartnerImageUrl(e.target.value)}
+                placeholder="https://example.com/partner-logo.png"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleAddPartner}
+                disabled={createTrustedPartnerMutation.isPending}
+              >
+                {createTrustedPartnerMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Plus className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+
+            {trustedPartners.length ? (
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {trustedPartners.map((partner, index) => (
+                  <div
+                    key={partner.id ?? `${partner.imageUrl}-${index}`}
+                    className="rounded-lg border border-border p-3"
+                  >
+                    <img
+                      src={partner.imageUrl}
+                      alt="trusted-partner"
+                      className="h-20 w-full rounded object-contain bg-secondary/30"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+
+                    <div className="mt-3 flex gap-2">
+                      <Input
+                        value={partner.id ? partnerDrafts[partner.id] ?? partner.imageUrl : partner.imageUrl}
+                        onChange={(e) => partner.id && handlePartnerDraftChange(partner.id, e.target.value)}
+                        disabled={!partner.id}
+                      />
+                    </div>
+
+                    <div className="mt-2 flex gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => partner.id && handleUpdatePartner(partner.id)}
+                        disabled={!partner.id || updateTrustedPartnerMutation.isPending}
+                      >
+                        {isArabic ? 'تحديث' : 'Update'}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => partner.id && handleRemovePartner(partner.id)}
+                        disabled={!partner.id || deleteTrustedPartnerMutation.isPending}
+                      >
+                        {isArabic ? 'حذف' : 'Delete'}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                {isArabic ? 'لا يوجد شركاء مضافون بعد.' : 'No trusted partners added yet.'}
+              </p>
+            )}
           </CardContent>
         </Card>
 

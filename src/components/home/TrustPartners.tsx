@@ -1,9 +1,11 @@
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useFetchTrustedPartners } from '@/services/useCMSService';
 
 const TrustPartners = () => {
     const { language } = useLanguage();
+    const { data } = useFetchTrustedPartners(true);
 
-    const partners = [
+    const fallbackPartners = [
         'MISA',
         'MCI',
         'GOSI',
@@ -13,6 +15,11 @@ const TrustPartners = () => {
         'MOFA',
         'MOL',
     ];
+
+    const partners = Array.isArray(data?.data)
+        ? data.data.filter((item) => typeof item?.imageUrl === 'string' && item.imageUrl.trim())
+        : [];
+    const hasCmsPartners = partners.length > 0;
 
     return (
         <section className="py-12 bg-secondary/30 overflow-hidden">
@@ -32,15 +39,27 @@ const TrustPartners = () => {
                 <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-secondary/30 to-transparent z-10" />
 
                 <div className="flex animate-marquee">
-                    {[...partners, ...partners].map((partner, i) => (
-                        <div key={i} className="flex-shrink-0 mx-6">
-                            <div className="bg-card border border-border rounded-xl px-8 py-6 shadow-sm hover:shadow-md transition-shadow">
-                                <span className="text-lg font-semibold text-foreground whitespace-nowrap">
-                                    {partner}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
+                    {hasCmsPartners
+                        ? [...partners, ...partners].map((partner, i) => (
+                              <div key={partner.id ?? `${partner.imageUrl}-${i}`} className="flex-shrink-0 mx-6">
+                                  <div className="bg-card border border-border rounded-xl px-2 py-2 shadow-sm hover:shadow-md transition-shadow">
+                                      <img
+                                          src={partner.imageUrl}
+                                          alt="trusted-partner"
+                                          className="h-12 w-32 object-cover"
+                                      />
+                                  </div>
+                              </div>
+                          ))
+                        : [...fallbackPartners, ...fallbackPartners].map((partner, i) => (
+                              <div key={`${partner}-${i}`} className="flex-shrink-0 mx-6">
+                                  <div className="bg-card border border-border rounded-xl px-2 py-2 shadow-sm hover:shadow-md transition-shadow">
+                                      <span className="text-lg font-semibold text-foreground whitespace-nowrap">
+                                          {partner}
+                                      </span>
+                                  </div>
+                              </div>
+                          ))}
                 </div>
             </div>
         </section>

@@ -17,6 +17,7 @@ import AdminLogin from "./pages/dashboard/AdminLogin";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ExploreSaudi from "./pages/ExploreSaudi";
 import FlightBooking from "./pages/FlightBooking";
+import Gallery from "./pages/Gallery";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
@@ -48,6 +49,7 @@ const AppRoutes = () => {
       <Route path="/terms" element={<Terms />} />
       <Route path="/appointment" element={<Appointment />} />
       <Route path="/flight-booking" element={<FlightBooking />} />
+      <Route path="/gallery" element={<Gallery />} />
       <Route path="/review-us" element={<SubmitReview />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard/login" element={<AdminLogin />} />

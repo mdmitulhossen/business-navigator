@@ -3,13 +3,26 @@ import SEOHead from '@/components/common/SEOHead';
 import Layout from '@/components/layout/Layout';
 import AboutTeamSectionSkeleton from '@/components/skeleton/AboutTeamSectionSkeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useFetchCMS } from '@/services/useCMSService';
 import { useFetchTeamMembers } from '@/services/useTeamService';
-import { Award, Lightbulb, Target } from 'lucide-react';
+import { Award, Lightbulb, Target, type LucideIcon } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+
+type ValueItem = {
+  icon: LucideIcon;
+  title: string;
+  content: string;
+};
 
 const About = () => {
   const { t, language } = useLanguage();
   const { pathname } = useLocation();
+  
+  // Fetch CMS data
+  const { data: cmsData } = useFetchCMS(true);
+  const cmsAboutCompany = cmsData?.data?.about_company;
+
+  // Fetch team members
   const { data: teamMembersData, isLoading: isTeamMembersLoading } = useFetchTeamMembers(
     { isActive: true, limit: 1000 },
     true,
@@ -17,7 +30,8 @@ const About = () => {
 
   const teamMembers = teamMembersData?.data ?? [];
 
-  const values = [
+  // Fallback values (hardcoded)
+  const fallbackValues = [
     {
       icon: Target,
       titleKey: 'about.vision',
@@ -35,6 +49,31 @@ const About = () => {
     },
   ];
 
+  // Use CMS data if available, otherwise use fallback
+  const values: ValueItem[] = cmsAboutCompany
+    ? [
+        {
+          icon: Target,
+          title: cmsAboutCompany.ourVision || t('about.vision'),
+          content: cmsAboutCompany.ourVision || t('about.visionDesc'),
+        },
+        {
+          icon: Lightbulb,
+          title: cmsAboutCompany.ourMission || t('about.mission'),
+          content: cmsAboutCompany.ourMission || t('about.missionDesc'),
+        },
+        {
+          icon: Award,
+          title: cmsAboutCompany.ourValues || t('about.values'),
+          content: cmsAboutCompany.ourValues || t('about.valuesDesc'),
+        },
+      ]
+    : fallbackValues.map((val) => ({
+        icon: val.icon,
+        title: t(val.titleKey),
+        content: t(val.descKey),
+      }));
+
   return (
     <Layout>
       <SEOHead pathname={pathname} />
@@ -46,18 +85,18 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {values.map((value, index) => (
               <div
-                key={value.titleKey}
+                key={index}
                 className="bg-card border border-border rounded-2xl p-8 text-center card-hover animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
                   <value.icon className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="font-display font-bold text-xl text-foreground mb-3">
-                  {t(value.titleKey)}
-                </h3>
+                {/* <h3 className="font-display font-bold text-xl text-foreground mb-3">
+                  {value.title}
+                </h3> */}
                 <p className="text-muted-foreground">
-                  {t(value.descKey)}
+                  {value.content}
                 </p>
               </div>
             ))}

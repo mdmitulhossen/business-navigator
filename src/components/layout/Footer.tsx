@@ -41,6 +41,7 @@ const Footer = () => {
   const quickLinks = [
     { label: t('nav.about'), path: '/about' },
     { label: t('nav.services'), path: '/services' },
+    { label: language === 'en' ? 'Gallery' : 'المعرض', path: '/gallery' },
     { label: t('nav.blog'), path: '/blog' },
     { label: t('nav.contact'), path: '/contact' },
   ];

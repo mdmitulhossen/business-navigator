@@ -139,6 +139,14 @@ export const pageMetadata: Record<string, SEOMetadata> = {
     ogImage: defaultImage,
     canonicalUrl: buildUrl('/review-us'),
   },
+  '/gallery': {
+    title: 'Gallery | Business Navigator',
+    description: 'Explore our company gallery with project images and featured videos.',
+    keywords: ['company gallery', 'project photos', 'business videos', 'portfolio'],
+    ogType: 'website',
+    ogImage: defaultImage,
+    canonicalUrl: buildUrl('/gallery'),
+  },
   '/explore-saudi': {
     title: 'Explore Saudi Arabia | Vision 2030 Guide',
     description: 'Discover Saudi Arabia with our comprehensive guide to cities, regions, and opportunities aligned with Vision 2030.',

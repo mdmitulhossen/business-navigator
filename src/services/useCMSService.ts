@@ -24,9 +24,27 @@ export type TCMSContact = {
 	[key: string]: string | undefined;
 };
 
+export type TAboutCompany = {
+	ourVision: string;
+	ourMission: string;
+	ourValues: string;
+};
+
+export type TCompanyGalleryVideo = {
+	type: 'embed' | 'link';
+	value: string;
+};
+
+export type TCompanyGellert = {
+	images: string[];
+	videos: TCompanyGalleryVideo[];
+};
+
 export type TCMS = {
 	id: string;
 	contact: TCMSContact;
+	about_company: TAboutCompany;
+	companyGellert: TCompanyGellert;
 	privacyPolicy: string;
 	termsOfUse: string;
 	createdAt?: string;

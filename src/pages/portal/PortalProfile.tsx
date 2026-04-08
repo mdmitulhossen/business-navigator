@@ -39,7 +39,7 @@ import { useNavigate } from 'react-router-dom';
   };
 
   const BrandLogo = () => (
-    <a href={C.site} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2.5">
+    <div className="inline-flex items-center gap-2.5">
       <div className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: C.n700 }}>
         <Building2 className="h-4 w-4 text-white" />
       </div>
@@ -49,7 +49,7 @@ import { useNavigate } from 'react-router-dom';
           Investment Consultant
         </p>
       </div>
-    </a>
+    </div>
   );
 
 const PortalProfile = () => {

@@ -4,6 +4,7 @@ import DashboardTopbar from '@/components/dashboard/DashboardTopbar';
 import BlogDashboardPage from '@/components/dashboard/pages/BlogDashboardPage';
 import BookAppointmentDashboardPage from '@/components/dashboard/pages/BookAppointmentDashboardPage';
 import BookFlightDashboardPage from '@/components/dashboard/pages/BookFlightDashboardPage';
+import ClientPortalDashboardPage from '@/components/dashboard/pages/ClientPortalDashboardPage';
 import CmsDashboardPage from '@/components/dashboard/pages/CmsDashboardPage';
 import ContactDashboardPage from '@/components/dashboard/pages/ContactDashboardPage';
 import OverviewDashboardPage from '@/components/dashboard/pages/OverviewDashboardPage';
@@ -70,6 +71,8 @@ const Dashboard = () => {
         return <BookFlightDashboardPage language={language} />;
       case 'reviews':
         return <ReviewDashboardPage language={language} />;
+      case 'client-portal':
+        return <ClientPortalDashboardPage language={language} />;
       default:
         return <OverviewDashboardPage language={language} />;
     }

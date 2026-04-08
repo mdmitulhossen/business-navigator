@@ -1,13 +1,14 @@
 import {
-  BookOpenText,
-  Briefcase,
-  CalendarCheck2,
-  ContactRound,
-  FilePenLine,
-  LayoutDashboard,
-  MessageSquareQuote,
-  Plane,
-  Users,
+    BookOpenText,
+    Briefcase,
+    CalendarCheck2,
+    ContactRound,
+    FilePenLine,
+    LayoutDashboard,
+    MessageSquareQuote,
+    Plane,
+    ShieldCheck,
+    Users,
 } from 'lucide-react';
 import type { DashboardNavItem } from './dashboardTypes.ts';
 
@@ -83,5 +84,13 @@ export const dashboardNavItems: DashboardNavItem[] = [
     icon: MessageSquareQuote,
     descriptionEn: 'Manage customer reviews',
     descriptionAr: 'إدارة تقييمات العملاء',
+  },
+  {
+    id: 'client-portal',
+    labelEn: 'Client Portal',
+    labelAr: 'بوابة العملاء',
+    icon: ShieldCheck,
+    descriptionEn: 'Manage portal users and services',
+    descriptionAr: 'إدارة مستخدمي وخدمات البوابة',
   },
 ];

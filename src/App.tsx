@@ -21,6 +21,9 @@ import Gallery from "./pages/Gallery";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import PortalLogin from "./pages/portal/PortalLogin";
+import PortalProfile from "./pages/portal/PortalProfile";
+import RequirePortalAuth from "./pages/portal/RequirePortalAuth";
 import Privacy from "./pages/Privacy";
 import ServiceDetail from "./pages/ServiceDetail";
 import Services from "./pages/Services";
@@ -53,6 +56,15 @@ const AppRoutes = () => {
       <Route path="/review-us" element={<SubmitReview />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard/login" element={<AdminLogin />} />
+      <Route path="/portal/login" element={<PortalLogin />} />
+      <Route
+        path="/portal/profile"
+        element={
+          <RequirePortalAuth>
+            <PortalProfile />
+          </RequirePortalAuth>
+        }
+      />
       <Route
         path="/dashboard"
         element={

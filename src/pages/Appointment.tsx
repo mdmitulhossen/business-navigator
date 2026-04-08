@@ -2,10 +2,11 @@ import PageHero from '@/components/common/PageHero';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useFetchAppointmentSlots } from '@/services/useAppointmentSlotService';
 import { useCreateAppointment, useFetchAppointments } from '@/services/useBookAppointmentService';
 import { useFetchServices } from '@/services/useService';
 import { Building2, Calendar, CheckCircle, Clock, Mail, Phone, User } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const Appointment = () => {
   const { language, t } = useLanguage();
@@ -22,12 +23,16 @@ const Appointment = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const timeSlots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
-
   const createAppointmentMutation = useCreateAppointment();
   const { data: appointmentsData, isLoading: isAppointmentsLoading } = useFetchAppointments({ limit: 1000 }, true);
+  const {
+    data: appointmentSlotsData,
+    isLoading: isAppointmentSlotsLoading,
+    isError: isAppointmentSlotsError,
+  } = useFetchAppointmentSlots(true);
   const { data: servicesData, isLoading: isServicesLoading } = useFetchServices({ isActive: true, limit: 1000 }, true);
 
+  const timeSlots = useMemo(() => appointmentSlotsData?.data?.timeSlots ?? [], [appointmentSlotsData?.data?.timeSlots]);
   const serviceOptions = servicesData?.data ?? [];
 
   const today = new Date();
@@ -45,6 +50,12 @@ const Appointment = () => {
   }, [appointmentsData?.data, formData.date]);
 
   const isSelectedSlotBooked = formData.time ? bookedSlotsForSelectedDate.has(formData.time) : false;
+
+  useEffect(() => {
+    if (formData.time && !timeSlots.includes(formData.time)) {
+      setFormData((prev) => ({ ...prev, time: '' }));
+    }
+  }, [formData.time, timeSlots]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData(prev => ({
@@ -138,33 +149,47 @@ const Appointment = () => {
                     <Clock className="w-4 h-4" />
                     {language === 'en' ? 'Select Time' : 'اختر الوقت'}
                   </label>
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                    {timeSlots.map((time) => (
-                      <button
-                        key={time}
-                        type="button"
-                        onClick={() => {
-                          if (!bookedSlotsForSelectedDate.has(time)) {
-                            setFormData(prev => ({ ...prev, time }));
-                          }
-                        }}
-                        disabled={isAppointmentsLoading || bookedSlotsForSelectedDate.has(time)}
-                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${formData.time === time
-                            ? 'bg-accent text-accent-foreground'
-                            : bookedSlotsForSelectedDate.has(time)
-                              ? 'cursor-not-allowed bg-rose-500/10 text-rose-700 line-through opacity-70 dark:text-rose-300'
-                              : 'bg-muted text-foreground hover:bg-muted/80'
-                          }`}
-                      >
-                        <span className="block">{time}</span>
-                        {bookedSlotsForSelectedDate.has(time) ? (
-                          <span className="block text-sm font-bold uppercase tracking-wide">Booked</span>
-                        ) : null}
-                      </button>
-                    ))}
-                  </div>
+                  {isAppointmentSlotsLoading ? (
+                    <p className="text-sm text-muted-foreground">
+                      {language === 'en' ? 'Loading available slots...' : 'جارٍ تحميل الأوقات المتاحة...'}
+                    </p>
+                  ) : isAppointmentSlotsError ? (
+                    <p className="text-sm text-rose-600 dark:text-rose-300">
+                      {language === 'en' ? 'No available slots here.' : 'لا توجد أوقات متاحة هنا.'}
+                    </p>
+                  ) : !timeSlots.length ? (
+                    <p className="text-sm text-muted-foreground">
+                      {language === 'en' ? 'No available slots here.' : 'لا توجد أوقات متاحة هنا.'}
+                    </p>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                      {timeSlots.map((time) => (
+                        <button
+                          key={time}
+                          type="button"
+                          onClick={() => {
+                            if (!bookedSlotsForSelectedDate.has(time)) {
+                              setFormData(prev => ({ ...prev, time }));
+                            }
+                          }}
+                          disabled={isAppointmentsLoading || isAppointmentSlotsLoading || bookedSlotsForSelectedDate.has(time)}
+                          className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${formData.time === time
+                              ? 'bg-accent text-accent-foreground'
+                              : bookedSlotsForSelectedDate.has(time)
+                                ? 'cursor-not-allowed bg-rose-500/10 text-rose-700 line-through opacity-70 dark:text-rose-300'
+                                : 'bg-muted text-foreground hover:bg-muted/80'
+                            }`}
+                        >
+                          <span className="block">{time}</span>
+                          {bookedSlotsForSelectedDate.has(time) ? (
+                            <span className="block text-sm font-bold uppercase tracking-wide">Booked</span>
+                          ) : null}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   <p className="mt-2 text-xs text-muted-foreground">
-                    {isAppointmentsLoading
+                    {isAppointmentSlotsLoading || isAppointmentsLoading
                       ? language === 'en'
                         ? 'Checking available slots...'
                         : 'جارٍ فحص الأوقات المتاحة...'
@@ -177,7 +202,7 @@ const Appointment = () => {
 
               <Button
                 onClick={() => setStep(2)}
-                disabled={!formData.date || !formData.time || isSelectedSlotBooked}
+                disabled={!formData.date || !formData.time || isSelectedSlotBooked || isAppointmentSlotsLoading || !timeSlots.length}
                 className="w-full mt-8 bg-accent text-accent-foreground hover:bg-accent/90"
                 size="lg"
               >

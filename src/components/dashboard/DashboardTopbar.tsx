@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Download, Menu, Plus, Search } from 'lucide-react';
+import { Download, Menu, Search } from 'lucide-react';
 
 export interface DashboardTopbarProps {
   title: string;
@@ -54,10 +54,10 @@ const DashboardTopbar = ({
             <Download className="h-4 w-4" />
             {isArabic ? 'تصدير' : 'Export'}
           </Button>
-          <Button onClick={onCreateClick} className="gap-2">
+          {/* <Button onClick={onCreateClick} className="gap-2">
             <Plus className="h-4 w-4" />
             {isArabic ? 'إضافة' : 'Create'}
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

@@ -16,6 +16,9 @@ export type TPortalService = {
   id: string;
   serviceName: string;
   status: TPortalServiceStatus;
+  dealAmount: number;
+  paidAmount: number;
+  dueAmount: number;
   adminDocuments: string[];
   customerDocuments: string[];
   comment: string;

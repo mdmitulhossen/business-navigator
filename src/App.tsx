@@ -21,6 +21,7 @@ import Gallery from "./pages/Gallery";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import Packages from "./pages/Packages";
 import PortalLogin from "./pages/portal/PortalLogin";
 import PortalProfile from "./pages/portal/PortalProfile";
 import RequirePortalAuth from "./pages/portal/RequirePortalAuth";
@@ -55,6 +56,7 @@ const AppRoutes = () => {
       <Route path="/gallery" element={<Gallery />} />
       <Route path="/review-us" element={<SubmitReview />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/packages" element={<Packages />} />
       <Route path="/dashboard/login" element={<AdminLogin />} />
       <Route path="/portal/login" element={<PortalLogin />} />
       <Route

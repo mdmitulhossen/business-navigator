@@ -39,6 +39,16 @@ export type TCompanyGellert = {
 	images: string[];
 	videos: TCompanyGalleryVideo[];
 };
+
+export type TCMSPackage = {
+	id: string;
+	title: string;
+	subTitle: string;
+	duration: string;
+	priceSar: number;
+	descriptions: string[];
+};
+
  export type TTrustedPartner = {
 	id?: string;
  	imageUrl: string;
@@ -50,6 +60,7 @@ export type TCMS = {
 	about_company: TAboutCompany;
 	companyGellert: TCompanyGellert;
  	trustedPartners: TTrustedPartner[];
+	packages: TCMSPackage[];
 	privacyPolicy: string;
 	termsOfUse: string;
 	createdAt?: string;

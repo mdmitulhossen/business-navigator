@@ -44,6 +44,8 @@ interface ClientPortalDashboardPageProps {
 type ServiceDraft = {
   serviceName: string;
   status: TPortalServiceStatus;
+  dealAmount: string;
+  paidAmount: string;
   comment: string;
   adminDocuments: string[];
   customerDocuments: string[];
@@ -54,6 +56,8 @@ type ServiceDraft = {
 const emptyDraft = (): ServiceDraft => ({
   serviceName: '',
   status: 'PENDING',
+  dealAmount: '0',
+  paidAmount: '0',
   comment: '',
   adminDocuments: [],
   customerDocuments: [],
@@ -122,6 +126,8 @@ const ClientPortalDashboardPage = ({ language }: ClientPortalDashboardPageProps)
       map[service.id] = serviceDrafts[service.id] || {
         serviceName: service.serviceName,
         status: service.status,
+        dealAmount: String(service.dealAmount ?? 0),
+        paidAmount: String(service.paidAmount ?? 0),
         comment: service.comment,
         adminDocuments: [...service.adminDocuments],
         customerDocuments: [...service.customerDocuments],
@@ -132,10 +138,30 @@ const ClientPortalDashboardPage = ({ language }: ClientPortalDashboardPageProps)
     return map;
   }, [selectedUser?.services, serviceDrafts]);
 
+  const getInitialDraftForService = (serviceId: string): ServiceDraft => {
+    const service = (selectedUser?.services || []).find((item) => item.id === serviceId);
+
+    if (!service) {
+      return emptyDraft();
+    }
+
+    return {
+      serviceName: service.serviceName,
+      status: service.status,
+      dealAmount: String(service.dealAmount ?? 0),
+      paidAmount: String(service.paidAmount ?? 0),
+      comment: service.comment,
+      adminDocuments: [...service.adminDocuments],
+      customerDocuments: [...service.customerDocuments],
+      adminDocInput: '',
+      customerDocInput: '',
+    };
+  };
+
   const setServiceDraft = (serviceId: string, updater: (prev: ServiceDraft) => ServiceDraft) => {
     setServiceDrafts((prev) => ({
       ...prev,
-      [serviceId]: updater(prev[serviceId] || emptyDraft()),
+      [serviceId]: updater(prev[serviceId] || getInitialDraftForService(serviceId)),
     }));
   };
 
@@ -178,6 +204,8 @@ const ClientPortalDashboardPage = ({ language }: ClientPortalDashboardPageProps)
       payload: {
         serviceName: draft.serviceName.trim(),
         status: draft.status,
+        dealAmount: Number(draft.dealAmount) || 0,
+        paidAmount: Number(draft.paidAmount) || 0,
         comment: draft.comment,
         adminDocuments: draft.adminDocuments,
         customerDocuments: draft.customerDocuments,
@@ -194,6 +222,8 @@ const ClientPortalDashboardPage = ({ language }: ClientPortalDashboardPageProps)
       payload: {
         serviceName: newServiceDraft.serviceName.trim(),
         status: newServiceDraft.status,
+        dealAmount: Number(newServiceDraft.dealAmount) || 0,
+        paidAmount: Number(newServiceDraft.paidAmount) || 0,
         comment: newServiceDraft.comment,
         adminDocuments: newServiceDraft.adminDocuments,
         customerDocuments: newServiceDraft.customerDocuments,
@@ -302,6 +332,9 @@ const ClientPortalDashboardPage = ({ language }: ClientPortalDashboardPageProps)
                 <TableHead>{isArabic ? 'كلمة المرور' : 'Password'}</TableHead>
                 <TableHead>{isArabic ? 'الحالة' : 'Status'}</TableHead>
                 <TableHead>{isArabic ? 'الخدمات' : 'Services'}</TableHead>
+                <TableHead>{isArabic ? 'إجمالي الصفقة' : 'Total Deal'}</TableHead>
+                <TableHead>{isArabic ? 'المدفوع' : 'Paid'}</TableHead>
+                <TableHead>{isArabic ? 'المتبقي' : 'Due'}</TableHead>
                 <TableHead className="text-right">{isArabic ? 'إجراءات' : 'Actions'}</TableHead>
               </TableRow>
             </TableHeader>
@@ -332,6 +365,15 @@ const ClientPortalDashboardPage = ({ language }: ClientPortalDashboardPageProps)
                       {user.services.length}
                     </Badge>
                   </TableCell>
+                  <TableCell>
+                    {user.services.reduce((sum, service) => sum + (service.dealAmount || 0), 0).toFixed(2)}
+                  </TableCell>
+                  <TableCell>
+                    {user.services.reduce((sum, service) => sum + (service.paidAmount || 0), 0).toFixed(2)}
+                  </TableCell>
+                  <TableCell>
+                    {user.services.reduce((sum, service) => sum + (service.dueAmount || 0), 0).toFixed(2)}
+                  </TableCell>
                   <TableCell className="text-right">
                     <div className="inline-flex gap-2">
                       <Button size="icon" variant="outline" onClick={() => setViewUserId(user.id)}>
@@ -350,7 +392,7 @@ const ClientPortalDashboardPage = ({ language }: ClientPortalDashboardPageProps)
               ))}
               {!users.length ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
+                  <TableCell colSpan={9} className="py-10 text-center text-muted-foreground">
                     {isArabic ? 'لا يوجد مستخدمون' : 'No users found'}
                   </TableCell>
                 </TableRow>
@@ -406,6 +448,28 @@ const ClientPortalDashboardPage = ({ language }: ClientPortalDashboardPageProps)
                         <SelectItem value="REJECTED">REJECTED</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+                </div>
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>{isArabic ? 'قيمة الصفقة' : 'Deal Amount'}</Label>
+                    <Input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={newServiceDraft.dealAmount}
+                      onChange={(e) => setNewServiceDraft((prev) => ({ ...prev, dealAmount: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>{isArabic ? 'المدفوع' : 'Paid Amount'}</Label>
+                    <Input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={newServiceDraft.paidAmount}
+                      onChange={(e) => setNewServiceDraft((prev) => ({ ...prev, paidAmount: e.target.value }))}
+                    />
                   </div>
                 </div>
                 <div className="mt-3 space-y-2">
@@ -483,6 +547,42 @@ const ClientPortalDashboardPage = ({ language }: ClientPortalDashboardPageProps)
                             <SelectItem value="REJECTED">REJECTED</SelectItem>
                           </SelectContent>
                         </Select>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 grid gap-3 md:grid-cols-3">
+                      <div className="space-y-2">
+                        <Label>{isArabic ? 'قيمة الصفقة' : 'Deal Amount'}</Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={draft.dealAmount}
+                          onChange={(e) =>
+                            setServiceDraft(service.id, (prev) => ({ ...prev, dealAmount: e.target.value }))
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>{isArabic ? 'المدفوع' : 'Paid Amount'}</Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={draft.paidAmount}
+                          onChange={(e) =>
+                            setServiceDraft(service.id, (prev) => ({ ...prev, paidAmount: e.target.value }))
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>{isArabic ? 'المتبقي' : 'Due Amount'}</Label>
+                        <Input
+                          value={(
+                            Math.max((Number(draft.dealAmount) || 0) - (Number(draft.paidAmount) || 0), 0)
+                          ).toFixed(2)}
+                          readOnly
+                        />
                       </div>
                     </div>
 

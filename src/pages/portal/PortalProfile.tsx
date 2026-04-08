@@ -126,6 +126,9 @@ const PortalProfile = () => {
   const totalServices = services.length;
   const completedServices = services.filter((s) => s.status === 'COMPLETED').length;
   const inProgressServices = services.filter((s) => s.status === 'IN_PROGRESS').length;
+  const totalDealAmount = services.reduce((sum, service) => sum + (service.dealAmount || 0), 0);
+  const totalPaidAmount = services.reduce((sum, service) => sum + (service.paidAmount || 0), 0);
+  const totalDueAmount = services.reduce((sum, service) => sum + (service.dueAmount || 0), 0);
   const totalCustomerDocs = services.reduce((sum, service) => sum + service.customerDocuments.length, 0);
 
   if (isLoading && !profile) {
@@ -249,6 +252,27 @@ const PortalProfile = () => {
           </Card>
         </section>
 
+        <section className="grid gap-3 sm:grid-cols-3">
+          <Card className="border-border/60 bg-card/95 shadow-none">
+            <CardContent className="p-4">
+              <p className="text-xs text-muted-foreground">{isArabic ? 'إجمالي قيمة الصفقات' : 'Total Deal Amount'}</p>
+              <p className="mt-1 text-xl font-bold">{totalDealAmount.toFixed(2)}</p>
+            </CardContent>
+          </Card>
+          <Card className="border-border/60 bg-card/95 shadow-none">
+            <CardContent className="p-4">
+              <p className="text-xs text-muted-foreground">{isArabic ? 'إجمالي المدفوع' : 'Total Paid Amount'}</p>
+              <p className="mt-1 text-xl font-bold text-emerald-600 dark:text-emerald-400">{totalPaidAmount.toFixed(2)}</p>
+            </CardContent>
+          </Card>
+          <Card className="border-border/60 bg-card/95 shadow-none">
+            <CardContent className="p-4">
+              <p className="text-xs text-muted-foreground">{isArabic ? 'إجمالي المتبقي' : 'Total Due Amount'}</p>
+              <p className="mt-1 text-xl font-bold text-rose-600 dark:text-rose-400">{totalDueAmount.toFixed(2)}</p>
+            </CardContent>
+          </Card>
+        </section>
+
         <section className="grid gap-6 xl:grid-cols-[2fr_1fr]">
           <div className="space-y-4">
             <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card/70 px-4 py-3">
@@ -280,6 +304,21 @@ const PortalProfile = () => {
                   </CardHeader>
 
                   <CardContent className="space-y-4">
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <div className="rounded-md border border-border bg-muted/25 p-3">
+                        <p className="text-[11px] text-muted-foreground">{isArabic ? 'قيمة الصفقة' : 'Deal Amount'}</p>
+                        <p className="text-sm font-semibold">{(service.dealAmount || 0).toFixed(2)}</p>
+                      </div>
+                      <div className="rounded-md border border-border bg-emerald-500/5 p-3">
+                        <p className="text-[11px] text-muted-foreground">{isArabic ? 'المدفوع' : 'Paid Amount'}</p>
+                        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{(service.paidAmount || 0).toFixed(2)}</p>
+                      </div>
+                      <div className="rounded-md border border-border bg-rose-500/5 p-3">
+                        <p className="text-[11px] text-muted-foreground">{isArabic ? 'المتبقي' : 'Due Amount'}</p>
+                        <p className="text-sm font-semibold text-rose-600 dark:text-rose-400">{(service.dueAmount || 0).toFixed(2)}</p>
+                      </div>
+                    </div>
+
                     <div className="grid gap-4 md:grid-cols-2">
                       <div className="space-y-2">
                         <p className="text-sm font-medium">{isArabic ? 'مستندات الإدارة' : 'Admin Documents'}</p>

@@ -23,6 +23,7 @@ import NotFound from "./pages/NotFound";
 import Privacy from "./pages/Privacy";
 import ServiceDetail from "./pages/ServiceDetail";
 import Services from "./pages/Services";
+import SubmitReview from "./pages/SubmitReview";
 import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const AppRoutes = () => {
       <Route path="/terms" element={<Terms />} />
       <Route path="/appointment" element={<Appointment />} />
       <Route path="/flight-booking" element={<FlightBooking />} />
+      <Route path="/review-us" element={<SubmitReview />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard/login" element={<AdminLogin />} />
       <Route

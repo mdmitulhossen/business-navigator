@@ -1,3 +1,4 @@
+import FeaturedReviewsSlider from '@/components/common/FeaturedReviewsSlider';
 import Layout from '@/components/layout/Layout';
 import {
     AlertDialog,
@@ -572,45 +573,17 @@ const FlightBooking = () => {
                     </div>
                 </div>
 
-                {/* Customer Reviews Section */}
-                {/* <div className="mt-16">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-                            {language === 'en' ? 'What Our Customers Say' : 'ماذا يقول عملاؤنا'}
-                        </h2>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {[1, 2, 3].map((review) => (
-                            <Card key={review} className="p-6 shadow-xl border-0 bg-white/90 dark:bg-slate-800/90">
-                                <div className="flex items-center gap-2 mb-4">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <Star key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                                    ))}
-                                </div>
-                                <p className="text-slate-600 dark:text-slate-400 mb-4">
-                                    {language === 'en' 
-                                        ? "Excellent service! The booking process was smooth and customer support was very helpful."
-                                        : "خدمة ممتازة! كانت عملية الحجز سهلة وكان دعم العملاء مفيداً جداً."
-                                    }
-                                </p>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-bold">
-                                        A
-                                    </div>
-                                    <div>
-                                        <p className="font-semibold text-slate-900 dark:text-white">
-                                            {language === 'en' ? 'Ahmed Al-Rashid' : 'أحمد الراشد'}
-                                        </p>
-                                        <p className="text-sm text-slate-500">
-                                            {language === 'en' ? 'Verified Customer' : 'عميل موثق'}
-                                        </p>
-                                    </div>
-                                </div>
-                            </Card>
-                        ))}
-                    </div>
-                </div> */}
+                <div className="mt-16">
+                    <FeaturedReviewsSlider
+                        language={language}
+                        title={language === 'en' ? 'What Our Customers Say' : 'ماذا يقول عملاؤنا'}
+                        subtitle={
+                            language === 'en'
+                                ? 'Featured verified reviews from our travelers and clients.'
+                                : 'تقييمات مميزة وموثوقة من المسافرين والعملاء.'
+                        }
+                    />
+                </div>
             </div>
         </div>
         </Layout>

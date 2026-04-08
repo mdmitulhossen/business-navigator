@@ -1,12 +1,13 @@
 import {
-    BookOpenText,
-    Briefcase,
-    CalendarCheck2,
-    ContactRound,
-    FilePenLine,
-    LayoutDashboard,
-    Plane,
-    Users,
+  BookOpenText,
+  Briefcase,
+  CalendarCheck2,
+  ContactRound,
+  FilePenLine,
+  LayoutDashboard,
+  MessageSquareQuote,
+  Plane,
+  Users,
 } from 'lucide-react';
 import type { DashboardNavItem } from './dashboardTypes.ts';
 
@@ -74,5 +75,13 @@ export const dashboardNavItems: DashboardNavItem[] = [
     icon: Plane,
     descriptionEn: 'Manage flight bookings',
     descriptionAr: 'إدارة حجوزات الرحلات',
+  },
+  {
+    id: 'reviews',
+    labelEn: 'Reviews',
+    labelAr: 'التقييمات',
+    icon: MessageSquareQuote,
+    descriptionEn: 'Manage customer reviews',
+    descriptionAr: 'إدارة تقييمات العملاء',
   },
 ];

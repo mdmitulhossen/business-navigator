@@ -7,6 +7,7 @@ import BookFlightDashboardPage from '@/components/dashboard/pages/BookFlightDash
 import CmsDashboardPage from '@/components/dashboard/pages/CmsDashboardPage';
 import ContactDashboardPage from '@/components/dashboard/pages/ContactDashboardPage';
 import OverviewDashboardPage from '@/components/dashboard/pages/OverviewDashboardPage';
+import ReviewDashboardPage from '@/components/dashboard/pages/ReviewDashboardPage';
 import ServicesDashboardPage from '@/components/dashboard/pages/ServicesDashboardPage';
 import TeamMembersDashboardPage from '@/components/dashboard/pages/TeamMembersDashboardPage';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -67,6 +68,8 @@ const Dashboard = () => {
         return <BookAppointmentDashboardPage language={language} />;
       case 'book-flight':
         return <BookFlightDashboardPage language={language} />;
+      case 'reviews':
+        return <ReviewDashboardPage language={language} />;
       default:
         return <OverviewDashboardPage language={language} />;
     }

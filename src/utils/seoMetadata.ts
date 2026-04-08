@@ -131,6 +131,14 @@ export const pageMetadata: Record<string, SEOMetadata> = {
     ogImage: defaultImage,
     canonicalUrl: buildUrl('/flight-booking'),
   },
+  '/review-us': {
+    title: 'Submit Review | Business Navigator',
+    description: 'Share your experience and rate our services to help us improve.',
+    keywords: ['customer review', 'rate service', 'feedback form', 'testimonial'],
+    ogType: 'website',
+    ogImage: defaultImage,
+    canonicalUrl: buildUrl('/review-us'),
+  },
   '/explore-saudi': {
     title: 'Explore Saudi Arabia | Vision 2030 Guide',
     description: 'Discover Saudi Arabia with our comprehensive guide to cities, regions, and opportunities aligned with Vision 2030.',

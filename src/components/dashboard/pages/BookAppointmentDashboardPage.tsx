@@ -1,36 +1,40 @@
 import DashboardPageLoader from '@/components/dashboard/DashboardPageLoader';
 import { ReusableTable, type TableColumn } from '@/components/dashboard/ReusableTable';
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import {
-    useDeleteAppointment,
-    useFetchAppointment,
-    useFetchAppointments,
-    useUpdateAppointmentStatus,
-    type AppointmentStatus,
-    type TBookAppointment,
+  useFetchAppointmentSlots,
+  useUpdateAppointmentSlots,
+} from '@/services/useAppointmentSlotService';
+import {
+  useDeleteAppointment,
+  useFetchAppointment,
+  useFetchAppointments,
+  useUpdateAppointmentStatus,
+  type AppointmentStatus,
+  type TBookAppointment,
 } from '@/services/useBookAppointmentService';
-import { Eye, Search, Trash2 } from 'lucide-react';
+import { Eye, Plus, Search, Trash2, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 interface BookAppointmentDashboardPageProps {
@@ -74,6 +78,13 @@ const formatDate = (value: string, language: 'en' | 'ar') => {
   }
 };
 
+const SLOT_TIME_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+const normalizeSlots = (slots: string[]) => {
+  const cleaned = slots.map((slot) => slot.trim()).filter(Boolean);
+  return Array.from(new Set(cleaned)).sort((a, b) => a.localeCompare(b));
+};
+
 const BookAppointmentDashboardPage = ({ language }: BookAppointmentDashboardPageProps) => {
   const isArabic = language === 'ar';
 
@@ -86,6 +97,9 @@ const BookAppointmentDashboardPage = ({ language }: BookAppointmentDashboardPage
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [viewAppointmentId, setViewAppointmentId] = useState<string | null>(null);
   const [deleteAppointment, setDeleteAppointment] = useState<TBookAppointment | null>(null);
+  const [newSlotInput, setNewSlotInput] = useState('');
+  const [draftSlots, setDraftSlots] = useState<string[]>([]);
+  const [slotError, setSlotError] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -108,6 +122,13 @@ const BookAppointmentDashboardPage = ({ language }: BookAppointmentDashboardPage
   );
 
   const { data, isLoading, isFetching } = useFetchAppointments(queryParams, true);
+  const {
+    data: appointmentSlotData,
+    isLoading: isSlotLoading,
+    isFetching: isSlotFetching,
+    isError: isSlotError,
+  } = useFetchAppointmentSlots(true);
+  const updateSlotMutation = useUpdateAppointmentSlots();
   const updateStatusMutation = useUpdateAppointmentStatus();
   const deleteAppointmentMutation = useDeleteAppointment();
   const viewAppointmentQuery = useFetchAppointment(viewAppointmentId ?? undefined, Boolean(viewAppointmentId));
@@ -119,6 +140,79 @@ const BookAppointmentDashboardPage = ({ language }: BookAppointmentDashboardPage
   useEffect(() => {
     if (page > totalPages) setPage(totalPages);
   }, [page, totalPages]);
+
+  const currentSlots = useMemo(() => normalizeSlots(appointmentSlotData?.data?.timeSlots ?? []), [appointmentSlotData?.data?.timeSlots]);
+
+  useEffect(() => {
+    setDraftSlots(currentSlots);
+    setSlotError('');
+  }, [currentSlots]);
+
+  const hasSlotChanges = useMemo(() => {
+    if (draftSlots.length !== currentSlots.length) return true;
+    return draftSlots.some((slot, index) => slot !== currentSlots[index]);
+  }, [draftSlots, currentSlots]);
+
+  const addSlot = () => {
+    const slot = newSlotInput.trim();
+
+    if (!slot) {
+      setSlotError(isArabic ? 'أدخل وقتاً أولاً.' : 'Enter a slot time first.');
+      return;
+    }
+
+    if (!SLOT_TIME_REGEX.test(slot)) {
+      setSlotError(isArabic ? 'صيغة الوقت يجب أن تكون HH:mm.' : 'Time format must be HH:mm.');
+      return;
+    }
+
+    if (draftSlots.includes(slot)) {
+      setSlotError(isArabic ? 'هذا الوقت موجود بالفعل.' : 'This slot already exists.');
+      return;
+    }
+
+    setDraftSlots((prev) => normalizeSlots([...prev, slot]));
+    setNewSlotInput('');
+    setSlotError('');
+  };
+
+  const removeSlot = (slot: string) => {
+    const nextSlots = draftSlots.filter((item) => item !== slot);
+    if (!nextSlots.length) {
+      setSlotError(isArabic ? 'يجب أن يبقى وقت واحد على الأقل.' : 'At least one slot is required.');
+      return;
+    }
+    setDraftSlots(nextSlots);
+    setSlotError('');
+  };
+
+  const resetSlots = () => {
+    setDraftSlots(currentSlots);
+    setNewSlotInput('');
+    setSlotError('');
+  };
+
+  const saveSlots = async () => {
+    const normalized = normalizeSlots(draftSlots);
+
+    if (!normalized.length) {
+      setSlotError(isArabic ? 'يجب إضافة وقت واحد على الأقل.' : 'Please keep at least one slot.');
+      return;
+    }
+
+    const invalid = normalized.find((slot) => !SLOT_TIME_REGEX.test(slot));
+    if (invalid) {
+      setSlotError(
+        isArabic
+          ? `صيغة غير صحيحة: ${invalid}. استخدم HH:mm`
+          : `Invalid slot format: ${invalid}. Use HH:mm`,
+      );
+      return;
+    }
+
+    setSlotError('');
+    await updateSlotMutation.mutateAsync({ timeSlots: normalized });
+  };
 
   const handleStatusChange = async (appointmentId: string, status: AppointmentStatus) => {
     try {
@@ -197,6 +291,95 @@ const BookAppointmentDashboardPage = ({ language }: BookAppointmentDashboardPage
 
   return (
     <section className="space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-4 sm:p-5">
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="text-base font-semibold text-foreground">
+              {isArabic ? 'إعدادات الأوقات المتاحة' : 'Appointment Slot Configuration'}
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              {isArabic
+                ? 'أضف أو احذف الأوقات المتاحة للحجز ثم احفظ التغييرات.'
+                : 'Add or remove available booking slots and save changes.'}
+            </p>
+          </div>
+          <Badge variant="outline" className="w-fit rounded-full">
+            {isSlotLoading || isSlotFetching ? (isArabic ? 'جارٍ التحميل...' : 'Syncing...') : `${draftSlots.length} ${isArabic ? 'وقت' : 'slots'}`}
+          </Badge>
+        </div>
+
+        {isSlotLoading ? (
+          <p className="text-sm text-muted-foreground">{isArabic ? 'جارٍ تحميل الأوقات...' : 'Loading slots...'}</p>
+        ) : isSlotError ? (
+          <p className="text-sm text-rose-600 dark:text-rose-300">
+            {isArabic ? 'تعذر تحميل الأوقات. حاول مرة أخرى.' : 'Unable to load slots. Please try again.'}
+          </p>
+        ) : (
+          <>
+            <div className="mb-3 flex flex-col gap-2 sm:flex-row">
+              <Input
+                value={newSlotInput}
+                onChange={(e) => setNewSlotInput(e.target.value)}
+                placeholder={isArabic ? 'مثال: 09:30' : 'Example: 09:30'}
+                className="sm:max-w-[180px]"
+                dir="ltr"
+              />
+              <Button type="button" variant="outline" onClick={addSlot} className="sm:w-auto">
+                <Plus className="mr-1 h-4 w-4" />
+                {isArabic ? 'إضافة وقت' : 'Add Slot'}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={resetSlots}
+                disabled={!hasSlotChanges || updateSlotMutation.isPending}
+                className="sm:w-auto"
+              >
+                {isArabic ? 'إعادة ضبط' : 'Reset'}
+              </Button>
+              <Button
+                type="button"
+                onClick={saveSlots}
+                disabled={!hasSlotChanges || updateSlotMutation.isPending || isSlotLoading || isSlotError}
+                className="sm:w-auto"
+              >
+                {updateSlotMutation.isPending
+                  ? isArabic
+                    ? 'جارٍ الحفظ...'
+                    : 'Saving...'
+                  : isArabic
+                    ? 'حفظ الأوقات'
+                    : 'Save Slots'}
+              </Button>
+            </div>
+
+            {slotError ? <p className="mb-3 text-sm text-rose-600 dark:text-rose-300">{slotError}</p> : null}
+
+            {!draftSlots.length ? (
+              <p className="text-sm text-muted-foreground">{isArabic ? 'لا توجد أوقات متاحة حالياً.' : 'No available slots right now.'}</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {draftSlots.map((slot) => (
+                  <div
+                    key={slot}
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-sm"
+                  >
+                    <span className="font-medium" dir="ltr">{slot}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeSlot(slot)}
+                      className="text-muted-foreground transition-colors hover:text-rose-600"
+                      aria-label={isArabic ? `حذف ${slot}` : `Remove ${slot}`}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
       <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-foreground">{isArabic ? 'إدارة المواعيد' : 'Manage Appointments'}</h2>
